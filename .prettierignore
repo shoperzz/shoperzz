@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.next/
+.turbo/
+pnpm-lock.yaml
+
+# UI elements
+**/components/ui/**
+**/ui/primitives/**

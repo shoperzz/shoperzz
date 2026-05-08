@@ -1,0 +1,12 @@
+# Dependencies and Build
+node_modules/
+dist/
+.next/
+.turbo/
+
+# Fichiers Générés
+pnpm-lock.yaml
+
+# Éléments UI Externes / Téléchargés (Shadcn, Tailwind UI, etc.)
+**/components/ui/**
+**/ui/primitives/**
