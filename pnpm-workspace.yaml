@@ -3,5 +3,5 @@ packages:
   - "packages/*"
   - "plugins/*"
   - "cli"
-  - "docs"
-  - "scripts"
+  - "demos/*"
+
