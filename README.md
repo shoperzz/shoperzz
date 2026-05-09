@@ -1,159 +1,128 @@
-# Turborepo starter
+<div align="center">
+  <img src="./assets/banners/shoperzz-dark.png" alt="Shoperzz Banner" width="1280" height="750" style="object-fit: cover;">
 
-This Turborepo starter is maintained by the Turborepo core team.
+  <p align="center">
+    <strong>A Modern, Plugin-Based Headless E-commerce Engine for Serious Builders.</strong>
+  </p>
 
-## Using this example
+  <div align="center">
+    <img src="https://img.shields.io/badge/NestJS-E0234E?style=flat-square&logo=nestjs&logoColor=white" alt="NestJS">
+    <img src="https://img.shields.io/badge/TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript">
+    <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black" alt="JavaScript">
+    <img src="https://img.shields.io/badge/Vendure-2F3542?style=flat-square&logo=shoperzz&logoColor=white" alt="Vendure">
+    <img src="https://img.shields.io/badge/GraphQL-E10098?style=flat-square&logo=graphql&logoColor=white" alt="GraphQL">
+    <img src="https://img.shields.io/badge/PostgreSQL-336791?style=flat-square&logo=postgresql&logoColor=white" alt="PostgreSQL">
+    <img src="https://img.shields.io/badge/TypeORM-FE0808?style=flat-square&logo=typeorm&logoColor=white" alt="TypeORM">
+    <img src="https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=node.js&logoColor=white" alt="Node.js">
+    <img src="https://img.shields.io/badge/npm-CB3837?style=flat-square&logo=npm&logoColor=white" alt="npm">
+    <img src="https://img.shields.io/badge/pnpm-F69220?style=flat-square&logo=pnpm&logoColor=white" alt="pnpm">
+    <img src="https://img.shields.io/badge/Turborepo-EF4444?style=flat-square&logo=turborepo&logoColor=white" alt="Turborepo">
+    <img src="https://img.shields.io/github/stars/shoperzz/shoperzz?style=flat-square&logo=github&color=FFD700" alt="GitHub Stars">
+  </div>
+</div>
 
-Run the following command:
+---
 
-```sh
-npx create-turbo@latest
+## About Shoperzz
+
+Shoperzz is an Enterprise-Grade Headless E-commerce Engine built for modularity, performance, and developer freedom. It decouples the core commerce logic from the storefront and features, allowing you to build exactly what you need without the bloat.
+
+Inspired by NestJS and [Vendure](https://github.com/vendure-ecommerce/vendure), Shoperzz operates on a strict plugin-first philosophy. Nothing is imposed; everything from local payment gateways (Orange Money, Wave) to WhatsApp notifications is an optional, decoupled plugin. This architecture ensures your build remains clean, only including the code your specific use-case requires.
+
+## Key Features
+
+- **Modular Architecture**: Facilitates adding new functionalities and integrating with third-party services.
+- **Robust API**: A well-documented API for flexible frontend integration.
+- **Optimized Performance**: Designed for speed and efficiency.
+- **Modern Tech Stack**: Utilizes the latest technologies for a pleasant development experience.
+- **Flexible Content Management**: Allows easy management of products, categories, and other content.
+- **Africa-Centric Features**: Native integration for local payment gateways (Orange Money, Wave, MTN MoMo, Airtel Money) and WhatsApp for customer communication and automations.
+- **Plugin System**: Shoperzz operates entirely on a plugin system, similar to Vendure. Local payments, WhatsApp, etc., are not hardcoded into the core. Nothing is imposed. The core framework remains lightweight, clean, and universal. What you see as "integrated features" is actually an ecosystem of official plugins that you install only if you need them.
+  - Want Orange Money? Install the plugin. Want Wave? Plugin. Want both plus MTN MoMo? Add them, configure them, and move on.
+  - Don't use WhatsApp in your project? Don't install the plugin; it won't exist for you. Your build remains clean.
+  - This philosophy, inspired by NestJS, ensures independent, decoupled modules that activate only when needed. Each plugin is an autonomous unit with its own logic, events, and handlers, integrating seamlessly without creating unnecessary dependencies.
+  - This means Shoperzz adapts to your project, not the other way around. You build a marketplace? Activate marketplace plugins. You're doing B2B? You have no reason to have the consumer WhatsApp plugin. You work in a market where Stripe works? Use the Stripe plugin; Orange Money plugins won't exist in your project. You start from scratch with only what you need.
+  - The ecosystem grows independently of the core. A plugin can be maintained by the Shoperzz team, the community, or by you directly for your specific use case. You can create your own payment plugin for a gateway no one has integrated yet. You contribute, you publish, others use it. This is how serious tools grow.
+  - This is where the comparison with "a ready-made application" completely falls apart. A ready-made application dictates to you. A plugin system empowers you. You decide what goes into your infrastructure, you know exactly what's running, you can audit, replace, and extend each component independently. It's the difference between an opaque monolith and an architecture you understand and control 100%.
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (>= 18)
+- pnpm
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/shoperzz/shoperzz.git
+   cd shoperzz
+   ```
+
+2. **Install dependencies**
+   ```bash
+   pnpm install
+   ```
+
+3. **Run in Development mode**
+   To start the entire monorepo (core, apps, and demos) in development mode:
+   ```bash
+   pnpm dev
+   ```
+
+### Running Demos
+If you want to run a specific demo, such as the basic storefront:
+```bash
+pnpm turbo run dev --filter store-basic
 ```
 
-## What's inside?
+## Project Structure
 
-This Turborepo includes the following packages/apps:
+| Directory | Description |
+| --- | --- |
+| `apps/` | Web applications (Platform, Docs, Dashboard) |
+| `packages/` | Core framework engines (`@shoperzz/core`, `common`, `testing`) |
+| `plugins/` | Official feature extensions and modules |
+| `cli/` | Official developer command-line interface |
+| `demos/` | Ready-to-use storefront and API examples |
+| `tooling/` | Shared build, lint, and test configurations |
+| `e2e/` | Cross-package end-to-end test scenarios |
 
-### Apps and Packages
+## Contributors
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+<a href="https://github.com/shoperzz/shoperzz/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=shoperzz/shoperzz" alt="Contributors" />
+</a>
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+## Maintainer
 
-### Utilities
+**[The Shoperzz Lead](https://github.com/shoperzz)** — lead maintainer
 
-This Turborepo has some additional tools already setup for you:
+## Official Ports
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+| Platform | Status |
+| --- | --- |
+| Vue.js | [Planned / In Progress] |
 
-### Build
+## Contributing
 
-To build all apps and packages, run the following command:
+We encourage and appreciate community contributions! If you wish to improve Shoperzz, please consult our [Contributing Guidelines](CONTRIBUTING.md) to learn how to report bugs, suggest enhancements, or submit code.
 
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
+## Security
 
-```sh
-cd my-turborepo
-turbo build
-```
+Security is a priority. If you discover a vulnerability, please consult our [Security Policy](SECURITY.md) to learn how to report it responsibly.
 
-Without global `turbo`, use your package manager:
+## License
 
-```sh
-cd my-turborepo
-npx turbo build
-pnpm dlx turbo build
-pnpm exec turbo build
-```
+This project is licensed under the [GNU General Public License version 3 (GPLv3)](LICENSE). For more details, please refer to the `LICENSE` file.
 
-You can build a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
+## Stats
 
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
+![Repobeats analytics](https://repobeats.axiom.co/api/embed/b1bf4dc0226458617adbdbf5586f2df953eb0922.svg 'Repobeats analytics image')
 
-```sh
-turbo build --filter=docs
-```
+---
 
-Without global `turbo`:
-
-```sh
-npx turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo dev
-```
-
-Without global `turbo`, use your package manager:
-
-```sh
-cd my-turborepo
-npx turbo dev
-pnpm exec turbo dev
-pnpm exec turbo dev
-```
-
-You can develop a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo dev --filter=web
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo login
-```
-
-Without global `turbo`, use your package manager:
-
-```sh
-cd my-turborepo
-npx turbo login
-pnpm exec turbo login
-pnpm exec turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo link
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo link
-pnpm exec turbo link
-pnpm exec turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.dev/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.dev/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.dev/docs/reference/configuration)
-- [CLI Usage](https://turborepo.dev/docs/reference/command-line-reference)
+<p align="center">
+  Built with love for serious builders.
+</p>
