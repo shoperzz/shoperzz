@@ -1,12 +1,14 @@
-# Applications (Layers 1 & 2)
+# Apps — Shoperzz.dev Platform
 
-This directory contains all executable applications within the Shoperzz monorepo.
-It houses the central core engine as well as public-facing presentation applications.
+This directory contains the web applications that make up Shoperzz's commercial and community infrastructure.
 
-## Structure
+## Applications
 
-* **api-core**: Headless backend engine (Layer 1).
-* **web-store**: Demonstration client application (Layer 2).
-* **admin-ui**: Demonstration administration interface (Layer 2).
+- **web/**: Official marketing site.
+- **docs/**: Interactive documentation site.
+- **api/**: Business API (contributor accounts, subscriptions).
+- **admin/**: Platform management dashboard.
 
-> Note: Industry-specific premium templates (Layer 3) do not reside in this open-source repository. They are maintained in separate private Git repositories.
+## Role
+
+The project's storefront and management tool for administrators and users.

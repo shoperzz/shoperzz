@@ -1,11 +1,9 @@
-# Primitives (@shoperzz/plugins)
+# Plugins — Shoperzz Ecosystem
 
-This directory represents the second layer of logistics: fully autonomous NPM packages designed to augment the core engine.
+This directory contains official plugins that extend the Core's functionality.
 
-Each subdirectory here is a standalone, independently testable project with its own configuration (package.json, TSConfig). A plugin must adhere to a strict rule: it exposes standardized logical interfaces that address a deep-local African requirement without creating any coupling with other modules.
+## Plugin Structure
+Each plugin is an independent package (`@shoperzz/plugin-*`) containing its own source code, tests, and `shoperzz.plugin.yml` manifest.
 
-Planned examples:
-- Mobile Money payment with network retries (Pro)
-- WhatsApp Business Notifications (Pro)
-- Intelligent shipping calculation by geographic zone (Pro)
-- E-commerce Analytics (Community)
+## Role
+Adding specific features without modifying the Core source code (e.g., local payments, WhatsApp notifications, logistics integrations).
