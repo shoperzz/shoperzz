@@ -115,8 +115,7 @@ _bmad-output/
 .claude/
 .cursor/
 .agent/
-CODE/
-.content-collections/
+.analysis/
 .vercel
 .env*.local
 .agents/
