@@ -101,9 +101,9 @@ shoperzz/
 ├── packages/      ← libraries published to npm
 │   ├── core/      ← @shoperzz/core — the engine
 │   ├── common/    ← @shoperzz/common — shared types
+│   ├── cli/       ← @shoperzz/cli — the `npx shoperzz` command
 │   └── testing/   ← @shoperzz/testing — test helpers
 ├── plugins/       ← official plugins
-├── cli/           ← @shoperzz/cli
 ├── demos/         ← demonstration projects
 ├── e2e/           ← end-to-end cross-package tests
 ├── tooling/       ← shared configurations and scripts
@@ -203,17 +203,17 @@ type(scope): short description in lowercase
 
 ### Available Types
 
-| Type | When | Version Effect |
-|---|---|---|
-| `feat` | New feature | bump MINOR |
-| `fix` | Bug fix | bump PATCH |
-| `perf` | Performance improvement | bump PATCH |
-| `security` | Security fix | bump PATCH |
-| `refactor` | Refactoring without visible change | no bump |
-| `test` | Tests only | no bump |
-| `docs` | Documentation only | no bump |
-| `chore` | Maintenance, deps | no bump |
-| `ci` | CI/CD | no bump |
+| Type       | When                               | Version Effect |
+|------------|------------------------------------|----------------|
+| `feat`     | New feature                        | bump MINOR     |
+| `fix`      | Bug fix                            | bump PATCH     |
+| `perf`     | Performance improvement            | bump PATCH     |
+| `security` | Security fix                       | bump PATCH     |
+| `refactor` | Refactoring without visible change | no bump        |
+| `test`     | Tests only                         | no bump        |
+| `docs`     | Documentation only                 | no bump        |
+| `chore`    | Maintenance, deps                  | no bump        |
+| `ci`       | CI/CD                              | no bump        |
 
 ### Available Scopes
 
