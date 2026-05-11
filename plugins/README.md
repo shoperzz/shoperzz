@@ -1,4 +1,4 @@
-# Plugins — Shoperzz Ecosystem
+# Plugins - Shoperzz Ecosystem
 
 This directory contains official plugins that extend the Core's functionality.
 
