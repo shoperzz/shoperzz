@@ -2,7 +2,7 @@
 
 ## Our Pledge
 
-Shoperzz is an open-source project built for African markets, by builders who understand these markets. Our community brings together developers from Senegal, Nigeria, Cameroon, Ivory Coast, Kenya, and beyond — with diverse backgrounds, languages, and experiences.
+Shoperzz is an open-source project with a strong focus on African markets, built by and for developers who understand these unique contexts. Our community is global, bringing together developers from diverse backgrounds, including those from Senegal, Nigeria, Cameroon, Ivory Coast, Kenya, and beyond. We especially welcome Vendure users from all over the world to join us and enrich our collective expertise.
 
 We pledge to make participation in this project a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, sex characteristics, gender identity and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, religion, or sexual identity and orientation.
 
