@@ -1,7 +1,7 @@
 <div align="center">
 
   <img src="./assets/logos/LOGO-COLORED-SVG.svg" alt="Shoperzz" width="380" />
-
+  <br/>
   <p>
     <strong>The modern, headless, open-source e-commerce engine for serious builders.</strong><br/>
     Built on NestJS & Vendure. Designed for Africa.
@@ -45,7 +45,7 @@
 
 Shoperzz is an Enterprise-Grade Headless E-commerce Engine built first for TypeScript Developers. It is designed for modularity, performance, and developer freedom. It decouples the core commerce logic from the storefront and features, allowing you to build exactly what you need without the bloat.
 
-Inspired by NestJS and **[Vendure](https://github.com/vendure-ecommerce/vendure)** (8,200+ ⭐ - a battle-tested headless commerce framework in TypeScript), Shoperzz operates on a strict plugin-first philosophy. Nothing is imposed; everything from local payment gateways (Orange Money, Wave) to WhatsApp notifications is an optional, decoupled plugin. This architecture ensures your build remains clean, only including the code your specific use-case requires.
+Inspired by NestJS and **[Vendure](https://github.com/vendurehq/vendure)** (8,200+ ⭐ - a battle-tested headless commerce framework in TypeScript), Shoperzz operates on a strict plugin-first philosophy. Nothing is imposed; everything from local payment gateways (Orange Money, Wave) to WhatsApp notifications is an optional, decoupled plugin. This architecture ensures your build remains clean, only including the code your specific use-case requires.
 
 ## Key Features
 
