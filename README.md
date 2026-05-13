@@ -7,8 +7,6 @@
     Built on NestJS & Vendure. Designed for Africa.
   </p>
 
-  <br/>
-
   <div>
     <img src="https://img.shields.io/badge/NestJS-E0234E?style=flat-square&logo=nestjs&logoColor=white" alt="NestJS">
     <img src="https://img.shields.io/badge/TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript">
@@ -31,20 +29,19 @@
     <img src="https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square" alt="PRs welcome">
   </div>
 
-  <br/>
-
   <p>
-    <a href="https://docs.shoperzz.dev">Documentation</a> ·
-    <a href="https://shoperzz.dev">Website</a> ·
-    <a href="https://discord.gg/shoperzz">Discord</a> ·
-    <a href="https://github.com/shoperzz/shoperzz/issues">Report Bug</a>
+    <a href="https://docs.shoperzz.dev">📚 Documentation</a> ·
+    <a href="https://shoperzz.dev">🌐 Website</a> ·
+    <a href="https://discord.gg/shoperzz">💬 Discord</a> ·
+    <a href="https://github.com/shoperzz/shoperzz/issues">🔊 Report Bug</a>
   </p>
 
 </div>
 
----
+<br/>
+<br/>
+<br/>
 
-## About Shoperzz
 
 Shoperzz is an Enterprise-Grade Headless E-commerce Engine built first for TypeScript Developers. It is designed for modularity, performance, and developer freedom. It decouples the core commerce logic from the storefront and features, allowing you to build exactly what you need without the bloat.
 
@@ -52,14 +49,14 @@ Inspired by NestJS and **[Vendure](https://github.com/vendure-ecommerce/vendure)
 
 ## Key Features
 
-| Feature                     | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-|-----------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Plugin-First Philosophy** | Shoperzz operates entirely on a plugin-first system, heavily inspired by NestJS and Vendure. Nothing is hardcoded or imposed into the core. What appear as "features" (local payments like Orange Money, Wave, MTN MoMo, or WhatsApp automations) are actually official, decoupled plugins. This ensures your build remains 100% clean—you decide what goes into your infrastructure, knowing exactly what's running, with the power to audit, replace, and extend each component independently. |
-| **Independent Modules**     | Each plugin is an autonomous unit with its own logic, events, and handlers. This architecture means Shoperzz adapts to your project, not the other way around. If you're building a B2B platform, you won't have consumer-focused plugins like WhatsApp unless you choose to. The ecosystem grows independently of the core, maintained by the Shoperzz team or the community, allowing you to create and publish your own payment gateways or services.                                         |
-| **Robust GraphQL API**      | A well-documented, unified API provides maximum flexibility for any frontend integration. Whether you're building a mobile app, a high-performance Next.js storefront, or a custom dashboard, Shoperzz provides the clean, typed data you need without the bloat of monolithic legacy platforms.                                                                                                                                                                                                 |
-| **Africa-Native Focus**     | Native, out-of-the-box integration for local payment gateways pervasive in the African market (Orange Money, Wave, MTN MoMo, Airtel Money). It also prioritizes WhatsApp as a first-class citizen for customer communication and business automation, recognizing its central role in the regional commerce landscape.                                                                                                                                                                           |
-| **Enterprise Scalability**  | Designed for performance, speed, and serious builders. Shoperzz handles complex marketplace logic or specialized B2B scenarios by leveraging a modern tech stack (Node.js, TypeScript, NestJS, TypeORM). It avoids the "ready-made application" trap by empowering developers with an architecture they understand and control entirely.                                                                                                                                                         |
-| **Total Sovereignty**       | Reclaim control over your e-commerce stack. By moving away from opaque monoliths to a transparent, plugin-based architecture, you gain the sovereignty needed to innovate faster. You start with a lightweight core and build up only with the specific modules your use-case requires.                                                                                                                                                                                                          |
+| Feature                     | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+|-----------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Plugin-First Philosophy** | Shoperzz operates on a strict plugin-first system, inspired by NestJS and Vendure. Nothing is hardcoded into the core; all functionalities, from payment gateways and shipping methods to communication channels and business automations, are implemented as optional, decoupled plugins. This architecture ensures your build remains clean and efficient, allowing you to precisely control what goes into your infrastructure. You gain the power to audit, replace, and extend each component independently, tailoring the platform to any market or business model.            |
+| **Independent Modules**     | Each plugin functions as an autonomous unit with its own logic, events, and handlers. This modularity ensures Shoperzz adapts to your project's unique requirements, rather than the other way around. Whether you need specific payment providers, custom CRM integrations, or unique communication flows (e.g., WhatsApp for certain regions), you only install the plugins relevant to your use case. This fosters an ecosystem that grows independently of the core, enabling the Shoperzz team, the community, or even you to create and publish new services and integrations. |
+| **Robust GraphQL API**      | A well-documented, unified API provides maximum flexibility for any frontend integration. Whether you're building a mobile app, a high-performance Next.js storefront, or a custom dashboard, Shoperzz provides the clean, typed data you need without the bloat of monolithic legacy platforms.                                                                                                                                                                                                                                                                                     |
+| **Africa-Native Focus**     | Native, out-of-the-box integration for local payment gateways pervasive in the African market (Orange Money, Wave, MTN MoMo, Airtel Money). It also prioritizes WhatsApp as a first-class citizen for customer communication and business automation, recognizing its central role in the regional commerce landscape.                                                                                                                                                                                                                                                               |
+| **Enterprise Scalability**  | Designed for performance, speed, and serious builders. Shoperzz handles complex marketplace logic or specialized B2B scenarios by leveraging a modern tech stack (Node.js, TypeScript, NestJS, TypeORM). It avoids the "ready-made application" trap by empowering developers with an architecture they understand and control entirely.                                                                                                                                                                                                                                             |
+| **Total Sovereignty**       | Reclaim control over your e-commerce stack. By moving away from opaque monoliths to a transparent, plugin-based architecture, you gain the sovereignty needed to innovate faster. You start with a lightweight core and build up only with the specific modules your use-case requires.                                                                                                                                                                                                                                                                                              |
 
 ## Project Structure
 
@@ -120,15 +117,6 @@ pnpm turbo run dev --filter store-basic
 ## Stats
 
 ![Alt](https://repobeats.axiom.co/api/embed/dc3ee4ef56a50b7b572f3cb71bbcff286342fd2a.svg "Repobeats analytics image")
-
-[//]: # (## Maintainer)
-
-[//]: # ()
-[//]: # (|                                                                                  | Name                                      | Role                      |)
-
-[//]: # (|----------------------------------------------------------------------------------|-------------------------------------------|---------------------------|)
-
-[//]: # (| [![Wistant]&#40;https://github.com/wistant.png?size=50&#41;]&#40;https://github.com/wistant&#41; | **[Wistant]&#40;https://github.com/wistant&#41;** | Creator & Lead Maintainer |)
 
 ## Contributing
 
