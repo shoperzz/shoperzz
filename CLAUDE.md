@@ -8,7 +8,7 @@
 
 ## What is Shoperzz
 
-Shoperzz is a **headless commerce engine** built on **NestJS** and **[Vendure](https://github.com/vendure-ecommerce/vendure)**. It is designed for African markets and operates on a strict **plugin-first architecture**.
+Shoperzz is a **headless commerce engine** built on **NestJS** and **[Vendure](https://github.com/vendurehq/vendure)**. It is designed for African markets and operates on a strict **plugin-first architecture**.
 
 - Everything beyond the core is a **plugin**
 - Plugins communicate **only via a typed event bus** — never via direct imports
@@ -21,16 +21,17 @@ Shoperzz is a **headless commerce engine** built on **NestJS** and **[Vendure](h
 
 ```
 shoperzz/
-├── apps/
-│   ├── api/            ← The NestJS API (deployable, developer-owned)
-│   └── dashboard/      ← Admin UI
+├── apps/               
+│   ├── api/            ← A NestJS API of web platform
+│   ├── web/            ← A frontend marketing website code source
+│   └── docs/           ← Documentation application of Shoperzz
 ├── packages/
 │   ├── core/           ← @shoperzz/core — the orchestrator
+│   ├── cli/            ← @shoperzz/cli — the `npx shoperzz` command
 │   ├── common/         ← @shoperzz/common — shared types, interfaces, constants
 │   └── testing/        ← @shoperzz/testing — helpers for plugin tests
 ├── plugins/            ← official plugins (each is an npm package)
-├── cli/                ← @shoperzz/cli
-├── demos/              ← non-published example projects
+├── demos/              ← Example/template applications built with Shoperzz
 ├── e2e/                ← cross-package end-to-end tests only
 ├── tooling/            ← shared tsconfig, jest config, eslint config
 └── docs/               ← markdown documentation
@@ -162,33 +163,33 @@ static getShopApiExtensions() {
 
 ## Naming Conventions
 
-| What | Convention | Example |
-|---|---|---|
-| Classes | PascalCase + suffix | `WavePlugin`, `WaveService`, `WaveSession` |
-| Files | kebab-case.role.ts | `wave.service.ts` |
-| Functions | camelCase, clear verb | `initiateWavePayment()` |
-| Constants | SCREAMING_SNAKE_CASE | `WAVE_TIMEOUT_MINUTES` |
-| DB tables | `prefix_plural` | `wave_sessions` |
-| Events | `domain.entity.action` | `payment.wave.confirmed` |
-| Env vars | `SHOPERZZ_PLUGIN_VAR` | `SHOPERZZ_WAVE_API_KEY` |
-| GraphQL types | PascalCase, plugin-prefixed | `WavePaymentSession` |
-| npm packages | `@shoperzz/plugin-[type]-[name]` | `@shoperzz/plugin-payment-wave` |
-| Git branches | `type/description` | `feat/plugin-payment-wave` |
+| What          | Convention                       | Example                                    |
+|---------------|----------------------------------|--------------------------------------------|
+| Classes       | PascalCase + suffix              | `WavePlugin`, `WaveService`, `WaveSession` |
+| Files         | kebab-case.role.ts               | `wave.service.ts`                          |
+| Functions     | camelCase, clear verb            | `initiateWavePayment()`                    |
+| Constants     | SCREAMING_SNAKE_CASE             | `WAVE_TIMEOUT_MINUTES`                     |
+| DB tables     | `prefix_plural`                  | `wave_sessions`                            |
+| Events        | `domain.entity.action`           | `payment.wave.confirmed`                   |
+| Env vars      | `SHOPERZZ_PLUGIN_VAR`            | `SHOPERZZ_WAVE_API_KEY`                    |
+| GraphQL types | PascalCase, plugin-prefixed      | `WavePaymentSession`                       |
+| npm packages  | `@shoperzz/plugin-[type]-[name]` | `@shoperzz/plugin-payment-wave`            |
+| Git branches  | `type/description`               | `feat/plugin-payment-wave`                 |
 
 ---
 
 ## Key Files to Know
 
-| File | Purpose |
-|---|---|
-| `apps/api/src/shoperzz.config.ts` | The master config — active plugins, their options |
-| `apps/api/src/app.module.ts` | One line: `ShoperzzCoreModule.forRoot(config)` |
-| `packages/core/src/plugin-registry/` | How plugins are loaded — read before modifying |
-| `packages/core/src/event-bus/` | The event system — central nervous system |
-| `tooling/tsconfig.base.json` | TypeScript config — all packages extend this |
-| `tooling/jest.base.config.ts` | Jest config — coverage thresholds are here |
-| `pnpm-workspace.yaml` | Workspace packages declaration |
-| `turbo.json` | Build pipeline |
+| File                                 | Purpose                                           |
+|--------------------------------------|---------------------------------------------------|
+| `apps/api/src/shoperzz.config.ts`    | The master config — active plugins, their options |
+| `apps/api/src/app.module.ts`         | One line: `ShoperzzCoreModule.forRoot(config)`    |
+| `packages/core/src/plugin-registry/` | How plugins are loaded — read before modifying    |
+| `packages/core/src/event-bus/`       | The event system — central nervous system         |
+| `tooling/tsconfig.base.json`         | TypeScript config — all packages extend this      |
+| `tooling/jest.base.config.ts`        | Jest config — coverage thresholds are here        |
+| `pnpm-workspace.yaml`                | Workspace packages declaration                    |
+| `turbo.json`                         | Build pipeline                                    |
 
 ---
 
