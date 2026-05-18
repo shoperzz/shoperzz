@@ -64,20 +64,20 @@ LOCAL_BRANCH=$(git branch --show-current)
 
 if [[ -z "$LOCAL_BRANCH" ]]; then
   error "You are in 'detached HEAD' mode. Return to a branch before syncing."
-  echo -e "     ${CYAN}git checkout develop${RESET}"
+  echo -e "     ${CYAN}git checkout dev${RESET}"
   exit 1
 fi
 
 info "Current local branch: ${BOLD}$LOCAL_BRANCH${RESET}"
 
 # ── Check Protected Branches ─────────────────────────────────────────────────
-PROTECTED_BRANCHES=("main" "develop")
+PROTECTED_BRANCHES=("main" "dev")
 
 if [[ " ${PROTECTED_BRANCHES[*]} " != *" $LOCAL_BRANCH "* ]]; then
   warn "You are on branch '${BOLD}$LOCAL_BRANCH${RESET}' (feature branch)."
   warn "This script syncs main branches. To update your feature branch:"
   echo -e "     ${CYAN}git fetch upstream${RESET}"
-  echo -e "     ${CYAN}git rebase upstream/develop${RESET}\n"
+  echo -e "     ${CYAN}git rebase upstream/dev${RESET}\n"
 
   if [[ "$FORCE" != true ]]; then
     read -rp "  Continue anyway? (y/N) " CONFIRM

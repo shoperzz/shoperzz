@@ -56,15 +56,15 @@ header "🔄 Step 1: Synchronization check"
 
 info "Checking connection to upstream..."
 if git remote get-url upstream > /dev/null 2>&1; then
-  git fetch upstream develop --quiet
-  BEHIND=$(git rev-list --count "HEAD..upstream/develop")
+  git fetch upstream dev --quiet
+  BEHIND=$(git rev-list --count "HEAD..upstream/dev")
   
   if [[ "$BEHIND" -gt 0 ]]; then
-    warn "Your branch is ${BOLD}$BEHIND commit(s) behind${RESET} upstream/develop."
+    warn "Your branch is ${BOLD}$BEHIND commit(s) behind${RESET} upstream/dev."
     error "Please run 'pnpm sync' before pushing."
     exit 1
   fi
-  success "Branch is synchronized with upstream/develop."
+  success "Branch is synchronized with upstream/dev."
 else
   warn "Remote 'upstream' not found. Skipping sync check."
 fi
@@ -88,13 +88,13 @@ fi
 header "🦋 Step 3: Changeset verification"
 
 # Check if files in packages/ or plugins/ have changed
-FILES_CHANGED=$(git diff --name-only upstream/develop...HEAD 2>/dev/null || git diff --name-only origin/develop...HEAD 2>/dev/null || git diff --name-only main...HEAD)
+FILES_CHANGED=$(git diff --name-only upstream/dev...HEAD 2>/dev/null || git diff --name-only origin/dev...HEAD 2>/dev/null || git diff --name-only main...HEAD)
 
 if echo "$FILES_CHANGED" | grep -E "^(packages|plugins)/" > /dev/null; then
   info "Detected changes in packages or plugins."
   
   # Check if a new changeset file exists in this branch
-  CHANGESET_EXISTS=$(git diff --name-only upstream/develop...HEAD 2>/dev/null | grep ".changeset/.*\.md" || true)
+  CHANGESET_EXISTS=$(git diff --name-only upstream/dev...HEAD 2>/dev/null | grep ".changeset/.*\.md" || true)
   
   if [[ -z "$CHANGESET_EXISTS" ]]; then
     warn "No changeset detected for package/plugin changes."
