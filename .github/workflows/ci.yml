@@ -81,24 +81,7 @@ jobs:
       # Use the root test script which triggers turbo for optimized execution
       - run: pnpm test
 
-  # ── 5. Changeset check ────────────────────────────────────────────────────
-  changeset:
-    name: Changeset Check
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    steps:
-      - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
-      - uses: pnpm/action-setup@v3
-        with: { version: 9.0.0 }
-      - uses: actions/setup-node@v4
-        with: { node-version: 20, cache: pnpm }
-      - run: pnpm install --frozen-lockfile
-      - uses: changesets/action@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  # ── 6. Commit lint ────────────────────────────────────────────────────────
+  # ── 5. Commit lint ────────────────────────────────────────────────────────
   commitlint:
     name: Commit Lint
     runs-on: ubuntu-latest
