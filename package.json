@@ -12,6 +12,7 @@
     "commitlint": "commitlint",
     "test": "turbo run test",
     "sync": "bash ./tooling/sync.sh",
+    "push": "bash ./tooling/push.sh",
     "release": "changeset publish"
   },
   "devDependencies": {

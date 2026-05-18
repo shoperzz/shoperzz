@@ -205,12 +205,26 @@ git rebase --continue
 git push origin feat/payment-mtn-momo --force-with-lease
 ```
 
-### Using the sync script
+### Using the sync and push scripts
+
+Shoperzz provides two automation scripts in `tooling/` to ensure a consistent workflow and prevent CI failures.
 
 ```bash
-# Easier — the script handles everything
+# 1. Before starting or after a break: Sync with upstream
 pnpm sync
+
+# 2. Before pushing your work: Validate and push
+pnpm push
 ```
+
+The `pnpm push` script performs the following checks:
+
+- **Synchronization**: Verifies if you are behind `upstream/develop`.
+- **Quality**: Runs `lint`, `typecheck`, and `test` across the workspace.
+- **Versioning**: Checks if a `.changeset` is needed and prompts you to create one.
+- **Safety**: Pushes to your fork with `--force-with-lease` if you rebased.
+
+Always use `pnpm push` instead of `git push` to ensure your PR is "green" before submission.
 
 ---
 
