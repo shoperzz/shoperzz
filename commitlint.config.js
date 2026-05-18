@@ -43,6 +43,8 @@ module.exports = {
         "config",
         "ci",
         "tooling",
+        "release",
+        "workspace",
       ],
     ],
     "subject-empty": [2, "never"],
