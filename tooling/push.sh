@@ -75,8 +75,8 @@ if [[ "$SKIP_VERIFY" == "true" ]]; then
 else
   header "🧪 Step 2: Quality validation (Turbo)"
   
-  info "Running lint, typecheck and tests..."
-  if pnpm lint && pnpm typecheck && pnpm test; then
+  info "Running lint, typecheck, tests and commitlint..."
+  if pnpm lint && pnpm typecheck && pnpm test && pnpm commitlint --from main; then
     success "All quality checks passed."
   else
     error "Quality checks failed. Fix errors before pushing."
