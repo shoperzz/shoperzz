@@ -1,0 +1,24 @@
+{
+  "name": "@shoperzz/testing",
+  "version": "0.0.1-alpha.0",
+  "description": "Test helpers and utilities for Shoperzz plugin authors",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@shoperzz/common": "workspace:*",
+    "@shoperzz/core": "workspace:*",
+    "jest": "^29.0.0"
+  },
+  "author": "Shoperzz Contributors",
+  "license": "GPL-3.0-or-later",
+  "publishConfig": {
+    "access": "public"
+  }
+}
