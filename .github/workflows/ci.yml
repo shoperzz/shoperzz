@@ -79,16 +79,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       # Use the root test script which triggers turbo for optimized execution
-      - run: pnpm test --coverage
-
-      - name: Upload Coverage
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: all-coverage
-          path: |
-            packages/*/coverage
-            plugins/*/coverage
+      - run: pnpm test
 
   # ── 5. Changeset check ────────────────────────────────────────────────────
   changeset:
