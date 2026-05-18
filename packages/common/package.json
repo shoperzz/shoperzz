@@ -1,22 +1,12 @@
 {
   "name": "@shoperzz/common",
   "version": "0.0.1-alpha.0",
-  "description": "Shared types and utilities for the Shoperzz e-commerce framework",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "private": false,
   "scripts": {
-    "build": "tsc",
-    "test": "jest"
+    "build": "echo 'Skeleton release'",
+    "test": "echo 'No tests yet'",
+    "lint": "echo 'No lint yet'"
   },
-  "keywords": [
-    "shoperzz",
-    "ecommerce",
-    "types"
-  ],
-  "author": "Shoperzz Contributors",
   "license": "GPL-3.0-or-later",
   "publishConfig": {
     "access": "public"
