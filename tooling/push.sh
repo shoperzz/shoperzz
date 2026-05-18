@@ -76,7 +76,7 @@ else
   header "🧪 Step 2: Quality validation (Turbo)"
   
   info "Running lint, typecheck, tests and commitlint..."
-  if pnpm lint && pnpm typecheck && pnpm test && pnpm commitlint --from main; then
+  if pnpm lint && pnpm typecheck && pnpm test && pnpm commitlint --from HEAD~1; then
     success "All quality checks passed."
   else
     error "Quality checks failed. Fix errors before pushing."

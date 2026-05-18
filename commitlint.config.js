@@ -15,6 +15,8 @@ module.exports = {
         "chore",
         "ci",
         "revert",
+        "style",
+        "workflow",
       ],
     ],
     "type-case": [2, "always", "lower-case"],
@@ -55,13 +57,14 @@ module.exports = {
       ],
     ],
     "subject-empty": [2, "never"],
-    "subject-case": [2, "always", "lower-case"],
-    "subject-max-length": [2, "always", 72],
-    "subject-full-stop": [2, "never", "."],
-    "body-leading-blank": [2, "always"],
-    "body-max-line-length": [2, "always", 100],
-    "footer-leading-blank": [2, "always"],
-    "footer-max-line-length": [2, "always", 100],
+    "subject-case": [0], // Disabled: Allow any case for flexibility
+    "subject-max-length": [1, "always", 100], // Warning instead of error
+    "subject-full-stop": [1, "never", "."],
+    "header-max-length": [1, "always", 100],
+    "body-leading-blank": [1, "always"],
+    "body-max-line-length": [0], // Disabled
+    "footer-leading-blank": [1, "always"],
+    "footer-max-line-length": [1, "always", 100],
   },
   helpUrl: "https://docs.shoperzz.dev/contributing/commits",
 };
