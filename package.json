@@ -7,13 +7,20 @@
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "check-types": "turbo run check-types",
+    "format:check": "prettier --check \"**/*.{ts,tsx,md}\"",
+    "typecheck": "turbo run check-types",
+    "commitlint": "commitlint",
     "test": "turbo run test",
-    "release": "turbo run build && changeset publish"
+    "sync": "bash ./tooling/sync.sh",
+    "release": "changeset publish"
   },
   "devDependencies": {
     "@changesets/cli": "^2.30.0",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@commitlint/types": "^21.0.1",
     "prettier": "^3.7.4",
+    "ts-node": "^10.9.2",
     "turbo": "^2.9.6",
     "typescript": "5.9.2"
   },
