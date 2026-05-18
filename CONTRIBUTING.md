@@ -53,20 +53,24 @@ Anything that makes Shoperzz better for developers and their users worldwide. In
 
 ```
 Node.js  >= 20 LTS
-pnpm     >= 8
+pnpm     >= 9.0.0 (Mandatory)
 Git      >= 2.38
 ```
+
+> [!IMPORTANT]
+> **PNPM is the only allowed package manager.** Using `npm` or `yarn` will corrupt the `pnpm-lock.yaml` file. PRs with corrupted lockfiles or evidence of other package managers will be automatically rejected.
 
 ### Installation
 
 ```bash
-# 1. Fork the repo on GitHub (top-right "Fork" button)
-
-# 2. Clone your fork
+# 1. Fork and clone
 git clone https://github.com/[your-username]/shoperzz.git
 cd shoperzz
 
-# 3. Run the setup script — it does everything automatically
+# 2. Install dependencies with pnpm ONLY
+pnpm install
+
+# 3. Setup hooks and tools
 pnpm setup
 ```
 

@@ -2,21 +2,19 @@
 
 ## Why Security is Critical Here
 
-Security is paramount for any e-commerce platform, and Shoperzz is no exception. As a commerce engine designed to facilitate online transactions and manage sensitive customer data, maintaining the highest security standards is not just a best practice—it's a fundamental commitment to our users and the integrity of their businesses.
+Shoperzz handles real financial transactions — Orange Money, Wave, MTN MoMo — in markets where every CFA franc counts. A security flaw is not just a bug. It's a potential loss of money for real users, and an irreparable loss of trust for the project.
 
-A security vulnerability in an e-commerce system can have severe consequences, ranging from financial losses and data breaches to reputational damage and a complete erosion of user trust. For Shoperzz, which empowers businesses to handle real financial transactions—including local payment methods like Orange Money, Wave, and MTN MoMo in diverse markets—the stakes are particularly high. Every transaction, every piece of customer data, and every interaction relies on a secure foundation. A flaw is not merely a technical bug; it represents a direct threat to the financial well-being of our users and the sustained trust in the Shoperzz ecosystem.
-
-We are deeply committed to protecting our users and their data. We take security seriously, and we actively encourage responsible disclosure of vulnerabilities. If you discover a security flaw, we are grateful for your contribution to making Shoperzz more robust, and we commit to acting swiftly and transparently to address it.
+We take security seriously. If you discover a vulnerability, we are grateful — and we act fast.
 
 ---
 
 ## Supported Versions
 
-| Version      | Security Support                              |
-|--------------|-----------------------------------------------|
-| latest (1.x) | ✅ Supported — patches applied                 |
-| 0.x (beta)   | ⚠️ Best effort — migration to 1.x recommended |
-| < 0.x        | ❌ Not supported                               |
+| Version | Security Support |
+|---|---|
+| latest (1.x) | ✅ Supported — patches applied |
+| 0.x (beta) | ⚠️ Best effort — migration to 1.x recommended |
+| < 0.x | ❌ Not supported |
 
 ---
 
@@ -28,7 +26,7 @@ A publicly exposed flaw before correction endangers all projects using Shoperzz 
 
 ### The Correct Procedure
 
-**1. Email <support@shoperzz.dev>**
+**1. Send an email to <security@shoperzz.dev>**
 
 Use the subject: `[SECURITY] Short description of the flaw`
 
@@ -47,24 +45,24 @@ Our public PGP key is available at: <https://shoperzz.dev/.well-known/security.t
 
 **3. Response Time**
 
-| Step                      | Deadline                             |
-|---------------------------|--------------------------------------|
-| Acknowledgment of receipt | 48h maximum                          |
-| Initial assessment        | 5 business days                      |
-| Patch developed           | Depending on criticality (see below) |
-| Patch release             | With the next release                |
-| Public disclosure         | After the patch is deployed          |
+| Step | Deadline |
+|---|---|
+| Acknowledgment of receipt | 48h maximum |
+| Initial assessment | 5 business days |
+| Patch developed | Depending on criticality (see below) |
+| Patch release | With the next release |
+| Public disclosure | After the patch is deployed |
 
 ---
 
 ## Criticality Levels and Remediation Deadlines
 
-| Level        | Description                                                              | Target Deadline |
-|--------------|--------------------------------------------------------------------------|-----------------|
-| **Critical** | Remote code execution, unauthorized access to payments, API key exposure | 48h             |
-| **High**     | Authentication bypass, customer data exposure, transaction manipulation  | 7 days          |
-| **Medium**   | Limited information leakage, partial denial of service                   | 30 days         |
-| **Low**      | Limited impact, minor bypasses                                           | 90 days         |
+| Level | Description | Target Deadline |
+|---|---|---|
+| **Critical** | Remote code execution, unauthorized access to payments, API key exposure | 48h |
+| **High** | Authentication bypass, customer data exposure, transaction manipulation | 7 days |
+| **Medium** | Limited information leakage, partial denial of service | 30 days |
+| **Low** | Limited impact, minor bypasses | 90 days |
 
 ---
 
@@ -125,4 +123,4 @@ These practices are continuously applied in Shoperzz:
 ---
 
 *Last updated: see git history of this file*
-*Support contact: <support@shoperzz.dev>*
+*Security contact: <security@shoperzz.dev>*
