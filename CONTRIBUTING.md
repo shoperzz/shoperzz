@@ -205,6 +205,29 @@ git rebase --continue
 git push origin feat/payment-mtn-momo --force-with-lease
 ```
 
+### The Shoperzz Development Lifecycle
+
+To maintain 100% technical alignment and avoid conflicts, every contributor MUST follow this cycle:
+
+1.  **`pnpm sync`** — Sync local state with global `upstream/develop`.
+2.  **CODE** — Implement your changes/fixes.
+3.  **`pnpm changeset`** — Declare your versioning intent.
+4.  **`pnpm push`** — Local audit + push to your fork.
+5.  **PULL REQUEST** — Open and review on GitHub.
+6.  **MERGE** — PR is merged into `upstream/develop`.
+7.  **`pnpm sync`** — **CRITICAL**: Final sync to bring merged changes back to your local machine.
+
+```mermaid
+graph TD
+    Sync1[pnpm sync] --> Code(Code & Local Tests)
+    Code --> Changeset[pnpm changeset]
+    Changeset --> Push[pnpm push]
+    Push --> PR(Pull Request & CI)
+    PR --> Merge(Merge to develop)
+    Merge --> Sync2[pnpm sync]
+    Sync2 --> Sync1
+```
+
 ### Using the sync and push scripts
 
 Shoperzz provides two automation scripts in `tooling/` to ensure a consistent workflow and prevent CI failures.
