@@ -19,9 +19,9 @@ module.exports = {
         "workflow",
       ],
     ],
-    "type-case": [2, "always", "lower-case"],
+    "type-case": [0],
     "type-empty": [2, "never"],
-    "scope-case": [2, "always", "kebab-case"],
+    "scope-case": [0],
     "scope-enum": [
       1,
       "always",
@@ -57,14 +57,14 @@ module.exports = {
       ],
     ],
     "subject-empty": [2, "never"],
-    "subject-case": [0], // Disabled: Allow any case for flexibility
-    "subject-max-length": [1, "always", 100], // Warning instead of error
-    "subject-full-stop": [1, "never", "."],
-    "header-max-length": [1, "always", 100],
-    "body-leading-blank": [1, "always"],
-    "body-max-line-length": [0], // Disabled
-    "footer-leading-blank": [1, "always"],
-    "footer-max-line-length": [1, "always", 100],
+    "subject-case": [0],
+    "subject-max-length": [0],
+    "subject-full-stop": [0],
+    "header-max-length": [0],
+    "body-leading-blank": [0],
+    "body-max-line-length": [0],
+    "footer-leading-blank": [0],
+    "footer-max-line-length": [0],
   },
   helpUrl: "https://docs.shoperzz.dev/contributing/commits",
 };
