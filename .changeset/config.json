@@ -4,12 +4,7 @@
   "commit": false,
   "fixed": [],
   "linked": [
-    [
-      "@shoperzz/core",
-      "@shoperzz/common",
-      "@shoperzz/cli",
-      "@shoperzz/testing"
-    ]
+    ["@shoperzz/core", "@shoperzz/common", "@shoperzz/cli", "@shoperzz/testing"]
   ],
   "access": "public",
   "baseBranch": "main",

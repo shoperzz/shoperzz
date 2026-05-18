@@ -42,7 +42,6 @@
 <br/>
 <br/>
 
-
 Shoperzz is an Enterprise-Grade Headless E-commerce Engine built first for TypeScript Developers. It is designed for modularity, performance, and developer freedom. It decouples the core commerce logic from the storefront and features, allowing you to build exactly what you need without the bloat.
 
 Inspired by NestJS and **[Vendure](https://github.com/vendurehq/vendure)** (8,200+ ⭐ - a battle-tested headless commerce framework in TypeScript), Shoperzz operates on a strict plugin-first philosophy. Nothing is imposed; everything from local payment gateways (Orange Money, Wave) to WhatsApp notifications is an optional, decoupled plugin. This architecture ensures your build remains clean, only including the code your specific use-case requires.
@@ -50,7 +49,7 @@ Inspired by NestJS and **[Vendure](https://github.com/vendurehq/vendure)** (8,20
 ## Key Features
 
 | Feature                     | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-|-----------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **Plugin-First Philosophy** | Shoperzz operates on a strict plugin-first system, inspired by NestJS and Vendure. Nothing is hardcoded into the core; all functionalities, from payment gateways and shipping methods to communication channels and business automations, are implemented as optional, decoupled plugins. This architecture ensures your build remains clean and efficient, allowing you to precisely control what goes into your infrastructure. You gain the power to audit, replace, and extend each component independently, tailoring the platform to any market or business model.            |
 | **Independent Modules**     | Each plugin functions as an autonomous unit with its own logic, events, and handlers. This modularity ensures Shoperzz adapts to your project's unique requirements, rather than the other way around. Whether you need specific payment providers, custom CRM integrations, or unique communication flows (e.g., WhatsApp for certain regions), you only install the plugins relevant to your use case. This fosters an ecosystem that grows independently of the core, enabling the Shoperzz team, the community, or even you to create and publish new services and integrations. |
 | **Robust GraphQL API**      | A well-documented, unified API provides maximum flexibility for any frontend integration. Whether you're building a mobile app, a high-performance Next.js storefront, or a custom dashboard, Shoperzz provides the clean, typed data you need without the bloat of monolithic legacy platforms.                                                                                                                                                                                                                                                                                     |
@@ -61,7 +60,7 @@ Inspired by NestJS and **[Vendure](https://github.com/vendurehq/vendure)** (8,20
 ## Project Structure
 
 | Directory   | Description                                                    |
-|-------------|----------------------------------------------------------------|
+| ----------- | -------------------------------------------------------------- |
 | `apps/`     | Web applications (Platform, Docs, Dashboard)                   |
 | `assets/`   | Project assets: svg logos, png banners and others              |
 | `packages/` | Core framework engines (`/core`, `/cli`,`/common`, `/testing`) |

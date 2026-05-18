@@ -1,9 +1,8 @@
 name: 🐛 Bug Report
 description: Report a bug in Shoperzz or an official plugin
-labels: ['bug', 'needs-triage']
+labels: ["bug", "needs-triage"]
 
 body:
-
   - type: markdown
     attributes:
       value: |
@@ -26,11 +25,11 @@ body:
     attributes:
       label: Impacted Package
       options:
-        - '@shoperzz/core'
-        - '@shoperzz/cli'
-        - '@shoperzz/plugin-payment-orange-money'
-        - '@shoperzz/plugin-payment-wave'
-        - '@shoperzz/plugin-whatsapp-notifications'
+        - "@shoperzz/core"
+        - "@shoperzz/cli"
+        - "@shoperzz/plugin-payment-orange-money"
+        - "@shoperzz/plugin-payment-wave"
+        - "@shoperzz/plugin-whatsapp-notifications"
         - Other (specify in description)
     validations:
       required: true
@@ -39,7 +38,7 @@ body:
     id: version
     attributes:
       label: Version
-      placeholder: '1.2.3'
+      placeholder: "1.2.3"
     validations:
       required: true
 
@@ -104,6 +103,6 @@ body:
     id: node-version
     attributes:
       label: Node.js Version
-      placeholder: '20.11.0'
+      placeholder: "20.11.0"
     validations:
       required: true

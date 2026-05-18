@@ -97,16 +97,20 @@ Every feature is a plugin. A plugin is a self-contained NestJS module that:
 ```typescript
 // Minimal plugin structure
 export class WavePlugin implements ShoperzzPlugin {
-  static entities   = [WaveSession]
-  static migrations = [CreateWaveSessionsTable]
+  static entities = [WaveSession];
+  static migrations = [CreateWaveSessionsTable];
 
   static init(options: WaveConfig): typeof WavePlugin {
-    this.options = options
-    return this
+    this.options = options;
+    return this;
   }
 
-  static getNestModule()           { return WaveModule }
-  static getShopApiExtensions()    { return { schema: waveShopSchema, resolvers: [WaveResolver] } }
+  static getNestModule() {
+    return WaveModule;
+  }
+  static getShopApiExtensions() {
+    return { schema: waveShopSchema, resolvers: [WaveResolver] };
+  }
 }
 ```
 
@@ -118,13 +122,13 @@ All inter-plugin communication goes through `ShoperzzEventBus`.
 
 ```typescript
 // ✓ Correct — emit an event
-this.eventBus.emit('payment.wave.confirmed', { orderId, amount, currency })
+this.eventBus.emit("payment.wave.confirmed", { orderId, amount, currency });
 
 // ✓ Correct — listen to an event
-this.eventBus.on('payment.wave.confirmed', this.onPaymentConfirmed.bind(this))
+this.eventBus.on("payment.wave.confirmed", this.onPaymentConfirmed.bind(this));
 
 // ✗ WRONG — never do this
-import { OrangeMoneyService } from '@shoperzz/plugin-payment-orange-money'
+import { OrangeMoneyService } from "@shoperzz/plugin-payment-orange-money";
 ```
 
 Event naming convention: `domain.entity.action` (e.g., `payment.orange-money.confirmed`)
@@ -205,18 +209,18 @@ static getShopApiExtensions() {
 
 ## Naming Conventions
 
-| What | Convention | Example |
-|---|---|---|
-| Classes | PascalCase + suffix | `WavePlugin`, `WaveService`, `WaveSession` |
-| Files | kebab-case.role.ts | `wave.service.ts` |
-| Functions | camelCase, clear verb | `initiateWavePayment()` |
-| Constants | SCREAMING_SNAKE_CASE | `WAVE_TIMEOUT_MINUTES` |
-| DB tables | `prefix_plural` | `wave_sessions` |
-| Events | `domain.entity.action` | `payment.wave.confirmed` |
-| Env vars | `SHOPERZZ_PLUGIN_VAR` | `SHOPERZZ_WAVE_API_KEY` |
-| GraphQL types | PascalCase, plugin-prefixed | `WavePaymentSession` |
-| npm packages | `@shoperzz/plugin-[type]-[name]` | `@shoperzz/plugin-payment-wave` |
-| Git branches | `type/description` | `feat/plugin-payment-wave` |
+| What          | Convention                       | Example                                    |
+| ------------- | -------------------------------- | ------------------------------------------ |
+| Classes       | PascalCase + suffix              | `WavePlugin`, `WaveService`, `WaveSession` |
+| Files         | kebab-case.role.ts               | `wave.service.ts`                          |
+| Functions     | camelCase, clear verb            | `initiateWavePayment()`                    |
+| Constants     | SCREAMING_SNAKE_CASE             | `WAVE_TIMEOUT_MINUTES`                     |
+| DB tables     | `prefix_plural`                  | `wave_sessions`                            |
+| Events        | `domain.entity.action`           | `payment.wave.confirmed`                   |
+| Env vars      | `SHOPERZZ_PLUGIN_VAR`            | `SHOPERZZ_WAVE_API_KEY`                    |
+| GraphQL types | PascalCase, plugin-prefixed      | `WavePaymentSession`                       |
+| npm packages  | `@shoperzz/plugin-[type]-[name]` | `@shoperzz/plugin-payment-wave`            |
+| Git branches  | `type/description`               | `feat/plugin-payment-wave`                 |
 
 ---
 
@@ -225,16 +229,16 @@ static getShopApiExtensions() {
 > **Important distinction:** `apps/api` is the **Shoperzz platform API** (developer auth, subscriptions, newsletter for shoperzz.dev). It is NOT an e-commerce API.
 > The e-commerce reference implementation lives in `demos/store-basic/`.
 
-| File | Purpose |
-|---|---|
+| File                                  | Purpose                                                   |
+| ------------------------------------- | --------------------------------------------------------- |
 | `demos/store1/src/shoperzz.config.ts` | Reference config — how a real e-commerce app uses plugins |
-| `demos/store1/src/app.module.ts` | One line: `ShoperzzCoreModule.forRoot(config)` |
-| `packages/core/src/plugin-registry/` | How plugins are loaded — read before modifying |
-| `packages/core/src/event-bus/` | The event system — central nervous system |
-| `tooling/tsconfig.base.json` | TypeScript config — all packages extend this |
-| `tooling/jest.base.config.ts` | Jest config — coverage thresholds are here |
-| `pnpm-workspace.yaml` | Workspace packages declaration |
-| `turbo.json` | Build pipeline |
+| `demos/store1/src/app.module.ts`      | One line: `ShoperzzCoreModule.forRoot(config)`            |
+| `packages/core/src/plugin-registry/`  | How plugins are loaded — read before modifying            |
+| `packages/core/src/event-bus/`        | The event system — central nervous system                 |
+| `tooling/tsconfig.base.json`          | TypeScript config — all packages extend this              |
+| `tooling/jest.base.config.ts`         | Jest config — coverage thresholds are here                |
+| `pnpm-workspace.yaml`                 | Workspace packages declaration                            |
+| `turbo.json`                          | Build pipeline                                            |
 
 ---
 

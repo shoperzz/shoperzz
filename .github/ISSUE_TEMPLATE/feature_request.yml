@@ -1,9 +1,8 @@
 name: ✨ Feature Request
 description: Propose a new feature or improvement
-labels: ['enhancement', 'needs-discussion']
+labels: ["enhancement", "needs-discussion"]
 
 body:
-
   - type: markdown
     attributes:
       value: |
@@ -74,8 +73,8 @@ body:
     attributes:
       label: Can you contribute to the implementation?
       options:
-        - 'Yes — I can open a PR'
-        - 'Partially — I can help'
-        - 'No — I am just submitting the idea'
+        - "Yes — I can open a PR"
+        - "Partially — I can help"
+        - "No — I am just submitting the idea"
     validations:
       required: true

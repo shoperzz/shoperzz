@@ -56,5 +56,3 @@ Maintainers who do not follow or enforce the Code of Conduct in good faith may f
 This Code of Conduct is adapted from the [Contributor Covenant](https://www.contributor-covenant.org), version 2.1, available at <https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>
 
 ---
-
-*This document is available in French. For any questions about this Code of Conduct, contact <conduct@shoperzz.dev>*

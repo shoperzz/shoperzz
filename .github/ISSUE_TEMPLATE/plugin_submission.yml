@@ -1,14 +1,13 @@
 name: 🔌 Plugin Submission
 description: Submit a community plugin for the official registry
-labels: ['plugin-submission', 'community']
+labels: ["plugin-submission", "community"]
 
 body:
-
   - type: markdown
     attributes:
       value: |
         ## Submit a Community Plugin
-        
+
         Before submitting, verify that your plugin meets the standards:
         - `shoperzz.plugin.yml` present and complete
         - Test coverage ≥ 80% (webhook handlers at 100%)
@@ -20,7 +19,7 @@ body:
     id: package-name
     attributes:
       label: npm Package Name
-      placeholder: '@shoperzz-community/plugin-payment-flutterwave'
+      placeholder: "@shoperzz-community/plugin-payment-flutterwave"
     validations:
       required: true
 
@@ -28,7 +27,7 @@ body:
     id: npm-url
     attributes:
       label: npm Link
-      placeholder: 'https://www.npmjs.com/package/@shoperzz-community/plugin-...'
+      placeholder: "https://www.npmjs.com/package/@shoperzz-community/plugin-..."
     validations:
       required: true
 
@@ -36,7 +35,7 @@ body:
     id: repo-url
     attributes:
       label: GitHub Repository
-      placeholder: 'https://github.com/[username]/shoperzz-plugin-...'
+      placeholder: "https://github.com/[username]/shoperzz-plugin-..."
     validations:
       required: true
 
@@ -84,7 +83,7 @@ body:
     id: coverage
     attributes:
       label: Test Coverage (%)
-      placeholder: '87%'
+      placeholder: "87%"
     validations:
       required: true
 
@@ -93,7 +92,7 @@ body:
     attributes:
       label: Compliance Checklist
       options:
-        - label: '`shoperzz.plugin.yml` present and complete'
+        - label: "`shoperzz.plugin.yml` present and complete"
           required: true
         - label: Unit tests present
           required: true

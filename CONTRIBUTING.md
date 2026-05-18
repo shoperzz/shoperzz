@@ -123,14 +123,14 @@ shoperzz/
 
 Key files to know:
 
-| File | Role |
-|---|---|
+| File                                  | Role                                                |
+| ------------------------------------- | --------------------------------------------------- |
 | `demos/store1/src/shoperzz.config.ts` | Reference config — how a store declares its plugins |
-| `demos/store1/src/app.module.ts` | One line: `ShoperzzCoreModule.forRoot(config)` |
-| `packages/core/src/plugin-registry/` | How plugins load at startup |
-| `packages/core/src/event-bus/` | Inter-plugin communication system |
-| `tooling/tsconfig.base.json` | TypeScript config all packages extend |
-| `CLAUDE.md` | Rules for AI coding agents on this codebase |
+| `demos/store1/src/app.module.ts`      | One line: `ShoperzzCoreModule.forRoot(config)`      |
+| `packages/core/src/plugin-registry/`  | How plugins load at startup                         |
+| `packages/core/src/event-bus/`        | Inter-plugin communication system                   |
+| `tooling/tsconfig.base.json`          | TypeScript config all packages extend               |
+| `CLAUDE.md`                           | Rules for AI coding agents on this codebase         |
 
 Each package in `packages/` and `plugins/` is published independently to npm. They are versioned separately via Changesets.
 
@@ -263,17 +263,17 @@ type(scope): short description in lowercase
 
 ### Available types
 
-| Type | When | Version effect |
-|---|---|---|
-| `feat` | New feature | MINOR bump |
-| `fix` | Bug fix | PATCH bump |
-| `perf` | Performance improvement | PATCH bump |
-| `security` | Security fix | PATCH bump |
-| `refactor` | Refactoring with no visible change | no bump |
-| `test` | Tests only | no bump |
-| `docs` | Documentation only | no bump |
-| `chore` | Maintenance, deps | no bump |
-| `ci` | CI/CD | no bump |
+| Type       | When                               | Version effect |
+| ---------- | ---------------------------------- | -------------- |
+| `feat`     | New feature                        | MINOR bump     |
+| `fix`      | Bug fix                            | PATCH bump     |
+| `perf`     | Performance improvement            | PATCH bump     |
+| `security` | Security fix                       | PATCH bump     |
+| `refactor` | Refactoring with no visible change | no bump        |
+| `test`     | Tests only                         | no bump        |
+| `docs`     | Documentation only                 | no bump        |
+| `chore`    | Maintenance, deps                  | no bump        |
+| `ci`       | CI/CD                              | no bump        |
 
 ### Available scopes
 
@@ -330,19 +330,19 @@ Full reference: [`05-reference/16-naming-conventions.md`](05-reference/16-naming
 
 Quick cheatsheet:
 
-| What | Format | Example |
-|---|---|---|
-| npm package | `@shoperzz/plugin-[type]-[name]` | `@shoperzz/plugin-payment-wave` |
-| Plugin folder | `[type]-[name]` | `payment-wave/` |
-| Source file | `[name].[role].ts` | `wave.service.ts` |
-| Class | PascalCase + role suffix | `WavePlugin`, `WaveService` |
-| Function | camelCase, clear verb | `initiateWavePayment()` |
-| Constant | SCREAMING_SNAKE_CASE | `WAVE_TIMEOUT_MINUTES` |
-| Event bus | `domain.entity.action` | `payment.wave.confirmed` |
-| DB table | `prefix_plural` | `wave_sessions` |
-| Env var | `SHOPERZZ_PLUGIN_VAR` | `SHOPERZZ_WAVE_API_KEY` |
-| GraphQL type | PascalCase, plugin-prefixed | `WavePaymentSession` |
-| Git branch | `type/description` | `feat/plugin-payment-wave` |
+| What          | Format                           | Example                         |
+| ------------- | -------------------------------- | ------------------------------- |
+| npm package   | `@shoperzz/plugin-[type]-[name]` | `@shoperzz/plugin-payment-wave` |
+| Plugin folder | `[type]-[name]`                  | `payment-wave/`                 |
+| Source file   | `[name].[role].ts`               | `wave.service.ts`               |
+| Class         | PascalCase + role suffix         | `WavePlugin`, `WaveService`     |
+| Function      | camelCase, clear verb            | `initiateWavePayment()`         |
+| Constant      | SCREAMING_SNAKE_CASE             | `WAVE_TIMEOUT_MINUTES`          |
+| Event bus     | `domain.entity.action`           | `payment.wave.confirmed`        |
+| DB table      | `prefix_plural`                  | `wave_sessions`                 |
+| Env var       | `SHOPERZZ_PLUGIN_VAR`            | `SHOPERZZ_WAVE_API_KEY`         |
+| GraphQL type  | PascalCase, plugin-prefixed      | `WavePaymentSession`            |
+| Git branch    | `type/description`               | `feat/plugin-payment-wave`      |
 
 ### What we never do
 
@@ -409,19 +409,20 @@ A PR that drops coverage below these thresholds is blocked by CI.
 
 ```typescript
 // ✓ Test that describes the expected behavior
-it('rejects a webhook with an invalid signature', async () => {
-  const payload = loadFixture('webhook-confirmed.json')
-  await expect(handler.handleWebhook(payload, 'invalid-sig'))
-    .rejects.toThrow(InvalidWebhookSignatureException)
-})
+it("rejects a webhook with an invalid signature", async () => {
+  const payload = loadFixture("webhook-confirmed.json");
+  await expect(handler.handleWebhook(payload, "invalid-sig")).rejects.toThrow(
+    InvalidWebhookSignatureException,
+  );
+});
 
 // ✓ Idempotency test — critical for payments
-it('does not process the same webhook twice', async () => {
-  const payload = loadFixture('webhook-confirmed.json')
-  transactionRepo.setExistingTransaction({ status: 'confirmed' })
-  await handler.handleWebhook(payload)
-  expect(eventBus.emitted).toHaveLength(0)
-})
+it("does not process the same webhook twice", async () => {
+  const payload = loadFixture("webhook-confirmed.json");
+  transactionRepo.setExistingTransaction({ status: "confirmed" });
+  await handler.handleWebhook(payload);
+  expect(eventBus.emitted).toHaveLength(0);
+});
 ```
 
 ### Fixtures — mandatory rule

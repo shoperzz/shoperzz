@@ -10,11 +10,11 @@ We take security seriously. If you discover a vulnerability, we are grateful —
 
 ## Supported Versions
 
-| Version | Security Support |
-|---|---|
-| latest (1.x) | ✅ Supported — patches applied |
-| 0.x (beta) | ⚠️ Best effort — migration to 1.x recommended |
-| < 0.x | ❌ Not supported |
+| Version      | Security Support                              |
+| ------------ | --------------------------------------------- |
+| latest (1.x) | ✅ Supported — patches applied                |
+| 0.x (beta)   | ⚠️ Best effort — migration to 1.x recommended |
+| < 0.x        | ❌ Not supported                              |
 
 ---
 
@@ -45,24 +45,24 @@ Our public PGP key is available at: <https://shoperzz.dev/.well-known/security.t
 
 **3. Response Time**
 
-| Step | Deadline |
-|---|---|
-| Acknowledgment of receipt | 48h maximum |
-| Initial assessment | 5 business days |
-| Patch developed | Depending on criticality (see below) |
-| Patch release | With the next release |
-| Public disclosure | After the patch is deployed |
+| Step                      | Deadline                             |
+| ------------------------- | ------------------------------------ |
+| Acknowledgment of receipt | 48h maximum                          |
+| Initial assessment        | 5 business days                      |
+| Patch developed           | Depending on criticality (see below) |
+| Patch release             | With the next release                |
+| Public disclosure         | After the patch is deployed          |
 
 ---
 
 ## Criticality Levels and Remediation Deadlines
 
-| Level | Description | Target Deadline |
-|---|---|---|
-| **Critical** | Remote code execution, unauthorized access to payments, API key exposure | 48h |
-| **High** | Authentication bypass, customer data exposure, transaction manipulation | 7 days |
-| **Medium** | Limited information leakage, partial denial of service | 30 days |
-| **Low** | Limited impact, minor bypasses | 90 days |
+| Level        | Description                                                              | Target Deadline |
+| ------------ | ------------------------------------------------------------------------ | --------------- |
+| **Critical** | Remote code execution, unauthorized access to payments, API key exposure | 48h             |
+| **High**     | Authentication bypass, customer data exposure, transaction manipulation  | 7 days          |
+| **Medium**   | Limited information leakage, partial denial of service                   | 30 days         |
+| **Low**      | Limited impact, minor bypasses                                           | 90 days         |
 
 ---
 
@@ -122,5 +122,5 @@ These practices are continuously applied in Shoperzz:
 
 ---
 
-*Last updated: see git history of this file*
-*Security contact: <security@shoperzz.dev>*
+_Last updated: see git history of this file_
+_Security contact: <security@shoperzz.dev>_

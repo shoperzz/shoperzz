@@ -8,7 +8,7 @@
 - [ ] ✨ New feature
 - [ ] 💥 Breaking change
 - [ ] 📝 Documentation only
-- [ ] ♻️  Refactoring
+- [ ] ♻️ Refactoring
 - [ ] 🔧 Maintenance / Dependencies
 - [ ] 🔒 Security fix
 
@@ -18,9 +18,9 @@
 - [ ] `packages/common`
 - [ ] `packages/cli`
 - [ ] `packages/testing`
-- [ ] `plugins/*` (Please specify: ___________)
-- [ ] `apps/*` (Please specify: ___________)
-- [ ] `demos/*` (Please specify: ___________)
+- [ ] `plugins/*` (Please specify: \***\*\_\_\_\*\***)
+- [ ] `apps/*` (Please specify: \***\*\_\_\_\*\***)
+- [ ] `demos/*` (Please specify: \***\*\_\_\_\*\***)
 
 ## Checklist
 

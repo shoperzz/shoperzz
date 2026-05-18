@@ -2,11 +2,10 @@ name: Security Audit
 
 on:
   schedule:
-    - cron: '0 8 * * 1'   # chaque lundi à 8h UTC
+    - cron: "0 8 * * 1" # chaque lundi à 8h UTC
   workflow_dispatch:
 
 jobs:
-
   audit:
     name: Dependency Audit
     runs-on: ubuntu-latest

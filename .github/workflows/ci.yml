@@ -53,7 +53,7 @@ jobs:
       - run: pnpm build
       - uses: actions/cache@v4
         with:
-          path: '**/dist'
+          path: "**/dist"
           key: build-${{ github.sha }}
 
   # ── 4. Tests — Détection automatique ──────────────────────────────────────
@@ -69,10 +69,10 @@ jobs:
         with: { node-version: 20, cache: pnpm }
       - uses: actions/cache@v4
         with:
-          path: '**/dist'
+          path: "**/dist"
           key: build-${{ github.sha }}
       - run: pnpm install --frozen-lockfile
-      
+
       # Use the root test script which triggers turbo for optimized execution
       - run: pnpm test --coverage
 
