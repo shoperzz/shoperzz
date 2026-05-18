@@ -2,7 +2,7 @@
 
 ## Our Pledge
 
-Shoperzz is an open-source project with a strong focus on African markets, built by and for developers who understand these unique contexts. Our community is global, bringing together developers from diverse backgrounds, including those from Senegal, Nigeria, Cameroon, Ivory Coast, Kenya, and beyond. We especially welcome Vendure users from all over the world to join us and enrich our collective expertise.
+Shoperzz is an open-source project, an Enterprise-Grade Headless E-commerce Engine built first for TypeScript Developers. It is designed for modularity, performance, and developer freedom. It decouples the core commerce logic from the storefront and features, allowing you to build exactly what you need without the bloat. We especially welcome developers from all over the world to join us and enrich our collective expertise.
 
 We pledge to make participation in this project a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, sex characteristics, gender identity and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, religion, or sexual identity and orientation.
 
@@ -45,7 +45,7 @@ This Code of Conduct applies within all project spaces, and also applies when an
 
 ## Enforcement
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting the project team at **conduct@shoperzz.dev**. All complaints will be reviewed and investigated, and will result in a response that is deemed necessary and appropriate to the circumstances. The project team is obligated to maintain confidentiality with regard to the reporter of an incident.
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting the project team at **<conduct@shoperzz.dev>**. All complaints will be reviewed and investigated, and will result in a response that is deemed necessary and appropriate to the circumstances. The project team is obligated to maintain confidentiality with regard to the reporter of an incident.
 
 Maintainers who do not follow or enforce the Code of Conduct in good faith may face temporary or permanent repercussions as determined by other members of the project's leadership.
 
@@ -53,8 +53,6 @@ Maintainers who do not follow or enforce the Code of Conduct in good faith may f
 
 ## Attribution
 
-This Code of Conduct is adapted from the [Contributor Covenant](https://www.contributor-covenant.org), version 2.1, available at https://www.contributor-covenant.org/version/2/1/code_of_conduct.html
+This Code of Conduct is adapted from the [Contributor Covenant](https://www.contributor-covenant.org), version 2.1, available at <https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>
 
 ---
-
-*This document is available in French. For any questions about this Code of Conduct, contact conduct@shoperzz.dev*

@@ -107,6 +107,8 @@ next-env.d.ts
 !AGENTS.md
 !CLAUDE.md
 !CHANGELOG.md
+!.github/*
+!.changeset/*
 
 # additionnals
 .protocols/
