@@ -35,8 +35,20 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-# ── 0. Initial Status & Formatting Check ─────────────────────────────────────
+# ── 0. Integrity & Branch Check ──────────────────────────────────────────────
 header "✨ Step 0: Integrity check"
+
+# 1. Essential Git Checks
+if ! git rev-parse --git-dir > /dev/null 2>&1; then
+  error "This directory is not a git repository."
+  exit 1
+fi
+
+LOCAL_BRANCH=$(git branch --show-current)
+if [[ -z "$LOCAL_BRANCH" ]]; then
+  error "You are in 'detached HEAD' mode. Return to a branch before pushing."
+  exit 1
+fi
 
 # Function to get core version
 get_core_version() {
