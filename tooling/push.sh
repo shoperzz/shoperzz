@@ -51,6 +51,25 @@ if [[ -z "$LOCAL_BRANCH" ]]; then
   exit 1
 fi
 
+# ── 0. Formatting Check ──────────────────────────────────────────────────────
+header "✨ Step 0: Formatting check"
+
+info "Running automated formatting..."
+pnpm format --write > /dev/null 2>&1 || true
+
+# Check for modified files after formatting
+DIRTY_FILES=$(git status --porcelain)
+if [[ -n "$DIRTY_FILES" ]]; then
+  warn "Formatting corrections applied to focal files."
+  divider
+  echo "$DIRTY_FILES"
+  divider
+  error "Formatting fixes detected. Please commit these changes before pushing."
+  info "Recommended: git commit -m \"style: format code according to standards\""
+  exit 1
+fi
+success "Code matches the required formatting standards."
+
 # ── 1. Synchronization Check ────────────────────────────────────────────────
 header "🔄 Step 1: Synchronization check"
 
