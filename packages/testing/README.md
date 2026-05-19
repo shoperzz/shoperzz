@@ -1,13 +1,31 @@
-# Testing (@shoperzz/testing)
+# @shoperzz/testing
 
-Turnkey testing environment for Shoperzz contributors.
+> Specialized testing utilities and mocks for Shoperzz development.
 
-## Contents
+`@shoperzz/testing` provides a comprehensive suite of tools to perform unit, integration, and E2E testing on Shoperzz plugins and core components without requiring a full production environment.
 
-- `createTestApp()`: Utility to launch a lightweight Shoperzz instance for testing.
-- Pre-configured mocks for the database and Event Bus.
-- Demo data (fixtures) to quickly populate a test environment.
+## Features
 
-## Role
+- **Mock Providers**: Virtual implementations of payment gateways and SMS services.
+- **Test Harnesses**: Isolated environments for plugin execution.
+- **Snapshot Utilities**: Compare complex e-commerce state transitions.
+- **Dummies**: Pre-configured data sets for orders, customers, and products.
 
-Allowing plugin developers to test their creations with minimal setup, without having to configure a complex DB or server.
+## Installation
+
+```bash
+pnpm add -D @shoperzz/testing
+```
+
+## Usage
+
+```typescript
+import { MockEngine } from "@shoperzz/testing";
+
+const testEngine = new MockEngine();
+// Execute tests
+```
+
+## License
+
+GPL-3.0-or-later © Shoperzz

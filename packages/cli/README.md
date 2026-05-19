@@ -1,13 +1,28 @@
-# CLI (@shoperzz/cli)
+# @shoperzz/cli
 
-The command-line tool for easily manipulating Shoperzz.
+> The command-line interface for the Shoperzz ecosystem.
 
-## Main Commands
+The Shoperzz CLI is the primary tool for scaffolding projects, managing plugins, and deploying the headless core. It streamlines the development workflow through a set of powerful commands.
 
-- `shoperzz create`: Generate a new project from a template.
-- `shoperzz add plugin`: Automatically install and configure a plugin.
-- `shoperzz generate`: Create boilerplate for developers.
+## Commands
 
-## Role
+- `shoperzz init`: Initialize a new Shoperzz project.
+- `shoperzz plugin add`: Install a plugin from the repository.
+- `shoperzz build`: Prepare the monorepo for production.
+- `shoperzz doctor`: Verify the health of the Shoperzz installation.
 
-The developer's companion for automating repetitive tasks and ensuring correct framework usage.
+## Installation
+
+```bash
+npm install -g @shoperzz/cli
+```
+
+## Usage
+
+```bash
+shoperzz --help
+```
+
+## License
+
+GPL-3.0-or-later © Shoperzz

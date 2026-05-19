@@ -1,14 +1,36 @@
-# Core (@shoperzz/core)
+# @shoperzz/core
 
-The brain of Shoperzz. A headless package based on NestJS and Vendure.
+> The central nervous system of the Shoperzz headless e-commerce framework.
 
-## Responsibilities
+`@shoperzz/core` provides the foundational architecture for building highly scalable, plugin-based e-commerce systems. It orchestrates the lifecycle of the framework, manages the plugin registry, and provides the main event-driven engine.
 
-- **Plugin Registry**: Dynamic loading and isolation of plugin modules.
-- **Event Bus**: Asynchronous messaging system for inter-plugin communication.
-- **Vendure Engine**: Integration and extension of the core commerce engine.
-- **GraphQL Schema**: Unification of Admin and Shop API schemas.
+## Features
 
-## Role
+- **Plugin Engine**: Dynamic loading and lifecycle management for Shoperzz extensions.
+- **Event Bus**: High-performance, typed communication layer for inter-module integration.
+- **Provider System**: Abstraction layer for data and service providers.
+- **Middleware Support**: Intercept and modify framework behavior at key injection points.
 
-It provides the API and business logic that everything else depends on.
+## Installation
+
+```bash
+pnpm add @shoperzz/core
+```
+
+## Usage
+
+```typescript
+import { ShoperzzCore } from "@shoperzz/core";
+
+const engine = new ShoperzzCore({
+  // configuration
+});
+
+engine.bootstrap().then(() => {
+  console.log("Shoperzz Engine is running.");
+});
+```
+
+## License
+
+GPL-3.0-or-later © Shoperzz

@@ -35,11 +35,10 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-# ── Initial Checks ───────────────────────────────────────────────────────────
-header "🚀 Shoperzz — Secure Push Protocol"
-divider
+# ── 0. Integrity & Branch Check ──────────────────────────────────────────────
+header "✨ Step 0: Integrity check"
 
-# Check if we are in a git repo
+# 1. Essential Git Checks
 if ! git rev-parse --git-dir > /dev/null 2>&1; then
   error "This directory is not a git repository."
   exit 1
@@ -50,6 +49,67 @@ if [[ -z "$LOCAL_BRANCH" ]]; then
   error "You are in 'detached HEAD' mode. Return to a branch before pushing."
   exit 1
 fi
+
+# Function to get core version
+get_core_version() {
+  node -p "require('./packages/core/package.json').version"
+}
+
+# Identify different types of uncommitted changes
+DIRTY_CHANGESETS=$(git status --porcelain | grep ".changeset/.*\.md" | awk '{print $2}' || true)
+DIRTY_CODE=$(git status --porcelain | grep -v ".changeset/.*\.md" | awk '{print $2}' || true)
+
+# Handle existing Changesets (Proactive Automation)
+if [[ -n "$DIRTY_CHANGESETS" ]]; then
+  warn "Uncommitted changesets detected:"
+  echo -e "${YELLOW}$DIRTY_CHANGESETS${RESET}"
+  VERSION=$(get_core_version)
+  read -rp "  Apply automated commit 'chore(release): dump v$VERSION'? (Y/n) " AUTO_COMMIT_CS
+  if [[ "$AUTO_COMMIT_CS" != "n" && "$AUTO_COMMIT_CS" != "N" ]]; then
+    echo "$DIRTY_CHANGESETS" | xargs git add
+    git commit -m "chore(release): dump v$VERSION"
+    success "Changesets committed."
+    # Refresh dirty code list
+    DIRTY_CODE=$(git status --porcelain | grep -v ".changeset/.*\.md" | awk '{print $2}' || true)
+  fi
+fi
+
+# Run Formatting
+info "Running automated formatting..."
+FILES_DIRTY_BEFORE=$(git diff --name-only)
+pnpm format --write > /dev/null 2>&1 || true
+FILES_DIRTY_AFTER=$(git diff --name-only)
+
+# Identify files specifically fixed by Prettier
+FILES_FIXED=$(comm -13 <(echo "$FILES_DIRTY_BEFORE" | sort) <(echo "$FILES_DIRTY_AFTER" | sort))
+
+if [[ -n "$FILES_FIXED" ]]; then
+  warn "Formatting corrections applied to:"
+  echo -e "${YELLOW}$FILES_FIXED${RESET}"
+  read -rp "  Commit these style fixes automatically? (Y/n) " AUTO_COMMIT_FORMAT
+  if [[ "$AUTO_COMMIT_FORMAT" != "n" && "$AUTO_COMMIT_FORMAT" != "N" ]]; then
+    echo "$FILES_FIXED" | xargs git add
+    git commit -m "style: format code according to standards"
+    success "Formatting committed."
+  else
+    error "Push blocked: Formatting fixes must be committed."
+    exit 1
+  fi
+fi
+
+# Final blocker: Check for any remaining dirty code
+DIRTY_REMAINING=$(git status --porcelain | grep -vE "^  " || true)
+if [[ -n "$DIRTY_REMAINING" ]]; then
+  divider
+  error "PUSH BLOCKED: You have uncommitted code changes."
+  echo "$DIRTY_REMAINING"
+  divider
+  info "RODIN Protocol requires all functional changes to be committed manually."
+  info "Please review and commit your work before pushing."
+  exit 1
+fi
+
+success "Integrity check passed."
 
 # ── 1. Synchronization Check ────────────────────────────────────────────────
 header "🔄 Step 1: Synchronization check"
@@ -100,8 +160,29 @@ if echo "$FILES_CHANGED" | grep -E "^(packages|plugins)/" > /dev/null; then
     warn "No changeset detected for package/plugin changes."
     read -rp "  Would you like to run 'pnpm changeset' now? (Y/n) " RUN_CHANGESET
     if [[ "$RUN_CHANGESET" != "n" && "$RUN_CHANGESET" != "N" ]]; then
+      # Identify changeset files BEFORE running the command
+      CHANGESETS_BEFORE=$(ls .changeset/*.md 2>/dev/null || true)
+      
       pnpm changeset
-      success "Changeset created. Please commit it before pushing if not automated."
+      success "Changeset created."
+      
+      # Identify the specific NEW changeset file
+      CHANGESETS_AFTER=$(ls .changeset/*.md 2>/dev/null || true)
+      NEW_CHANGESET=$(comm -13 <(echo "$CHANGESETS_BEFORE" | sort) <(echo "$CHANGESETS_AFTER" | sort))
+      
+      if [[ -n "$NEW_CHANGESET" ]]; then
+        # Extract core version for a professional commit message
+        CURRENT_VERSION=$(node -p "require('./packages/core/package.json').version")
+        
+        read -rp "  Would you like to commit the new changeset ($NEW_CHANGESET) automatically? (Y/n) " AUTO_COMMIT_CHANGESET
+        if [[ "$AUTO_COMMIT_CHANGESET" != "n" && "$AUTO_COMMIT_CHANGESET" != "N" ]]; then
+          git add "$NEW_CHANGESET"
+          git commit -m "chore(release): prepare v$CURRENT_VERSION"
+          success "Changeset $NEW_CHANGESET committed."
+        else
+          warn "New changeset $NEW_CHANGESET is not committed."
+        fi
+      fi
     else
       warn "Proceeding without changeset (not recommended for releases)."
     fi
