@@ -20,14 +20,14 @@ pnpm add @shoperzz/core
 ## Usage
 
 ```typescript
-import { ShoperzzCore } from '@shoperzz/core';
+import { ShoperzzCore } from "@shoperzz/core";
 
 const engine = new ShoperzzCore({
   // configuration
 });
 
 engine.bootstrap().then(() => {
-  console.log('Shoperzz Engine is running.');
+  console.log("Shoperzz Engine is running.");
 });
 ```
 

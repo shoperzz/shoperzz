@@ -20,7 +20,7 @@ pnpm add @shoperzz/common
 ## Usage
 
 ```typescript
-import { IShopperzzPlugin, PluginConfig } from '@shoperzz/common';
+import { IShopperzzPlugin, PluginConfig } from "@shoperzz/common";
 
 export class MyPlugin implements IShopperzzPlugin {
   // Implementation

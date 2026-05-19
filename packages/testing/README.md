@@ -20,7 +20,7 @@ pnpm add -D @shoperzz/testing
 ## Usage
 
 ```typescript
-import { MockEngine } from '@shoperzz/testing';
+import { MockEngine } from "@shoperzz/testing";
 
 const testEngine = new MockEngine();
 // Execute tests
