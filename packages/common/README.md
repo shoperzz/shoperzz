@@ -1,13 +1,32 @@
-# Common (@shoperzz/common)
+# @shoperzz/common
 
-The single source of technical truth for the Shoperzz ecosystem.
+> Shared interfaces, types, and utilities for the Shoperzz ecosystem.
 
-## Contents
+This package serves as the "source of truth" for all contracts between the Shoperzz core and its plugins. It ensures strict typing and architectural consistency across the entire monorepo.
 
-- Contract interfaces for Plugins.
-- Global enums and constants (order statuses, permissions).
-- Validation and security utilities (HMAC, JWT).
+## Key Components
 
-## Role
+- **Interfaces**: Definitions for `ShoperzzPlugin`, `PaymentProvider`, `SmsProvider`, etc.
+- **Universal Types**: Domain objects for orders, customers, and inventory.
+- **Schemas**: Shared validation schemas for API and configuration.
+- **Constants**: Framework-wide constants and error codes.
 
-Reducing code duplication and ensuring all packages speak the same language (strict typing).
+## Installation
+
+```bash
+pnpm add @shoperzz/common
+```
+
+## Usage
+
+```typescript
+import { IShopperzzPlugin, PluginConfig } from '@shoperzz/common';
+
+export class MyPlugin implements IShopperzzPlugin {
+  // Implementation
+}
+```
+
+## License
+
+Apache-2.0 © Shoperzz
