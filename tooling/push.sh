@@ -35,61 +35,69 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-# ── Initial Checks ───────────────────────────────────────────────────────────
-header "🚀 Shoperzz — Secure Push Protocol"
-divider
+# ── 0. Initial Status & Formatting Check ─────────────────────────────────────
+header "✨ Step 0: Integrity check"
 
-# Check if we are in a git repo
-if ! git rev-parse --git-dir > /dev/null 2>&1; then
-  error "This directory is not a git repository."
-  exit 1
+# Function to get core version
+get_core_version() {
+  node -p "require('./packages/core/package.json').version"
+}
+
+# Identify different types of uncommitted changes
+DIRTY_CHANGESETS=$(git status --porcelain | grep ".changeset/.*\.md" | awk '{print $2}' || true)
+DIRTY_CODE=$(git status --porcelain | grep -v ".changeset/.*\.md" | awk '{print $2}' || true)
+
+# Handle existing Changesets (Proactive Automation)
+if [[ -n "$DIRTY_CHANGESETS" ]]; then
+  warn "Uncommitted changesets detected:"
+  echo -e "${YELLOW}$DIRTY_CHANGESETS${RESET}"
+  VERSION=$(get_core_version)
+  read -rp "  Apply automated commit 'chore(release): dump v$VERSION'? (Y/n) " AUTO_COMMIT_CS
+  if [[ "$AUTO_COMMIT_CS" != "n" && "$AUTO_COMMIT_CS" != "N" ]]; then
+    echo "$DIRTY_CHANGESETS" | xargs git add
+    git commit -m "chore(release): dump v$VERSION"
+    success "Changesets committed."
+    # Refresh dirty code list
+    DIRTY_CODE=$(git status --porcelain | grep -v ".changeset/.*\.md" | awk '{print $2}' || true)
+  fi
 fi
 
-LOCAL_BRANCH=$(git branch --show-current)
-if [[ -z "$LOCAL_BRANCH" ]]; then
-  error "You are in 'detached HEAD' mode. Return to a branch before pushing."
-  exit 1
-fi
-
-# ── 0. Formatting Check ──────────────────────────────────────────────────────
-header "✨ Step 0: Formatting check"
-
-# Snapshot of modified files BEFORE formatting
-FILES_DIRTY_BEFORE=$(git diff --name-only)
-
+# Run Formatting
 info "Running automated formatting..."
+FILES_DIRTY_BEFORE=$(git diff --name-only)
 pnpm format --write > /dev/null 2>&1 || true
-
-# Snapshot of modified files AFTER formatting
 FILES_DIRTY_AFTER=$(git diff --name-only)
 
-# Identify files specifically touched by Prettier
+# Identify files specifically fixed by Prettier
 FILES_FIXED=$(comm -13 <(echo "$FILES_DIRTY_BEFORE" | sort) <(echo "$FILES_DIRTY_AFTER" | sort))
 
 if [[ -n "$FILES_FIXED" ]]; then
   warn "Formatting corrections applied to:"
   echo -e "${YELLOW}$FILES_FIXED${RESET}"
-  divider
-  read -rp "  Would you like to commit these formatting fixes automatically? (Y/n) " AUTO_COMMIT_FORMAT
+  read -rp "  Commit these style fixes automatically? (Y/n) " AUTO_COMMIT_FORMAT
   if [[ "$AUTO_COMMIT_FORMAT" != "n" && "$AUTO_COMMIT_FORMAT" != "N" ]]; then
-    # Stage ONLY the files fixed by prettier
     echo "$FILES_FIXED" | xargs git add
     git commit -m "style: format code according to standards"
-    success "Formatting fixes committed."
+    success "Formatting committed."
   else
-    warn "Formatting fixes pending. Remember to commit them."
+    error "Push blocked: Formatting fixes must be committed."
+    exit 1
   fi
 fi
 
-# Remind user of other dirty files not touched by formatting
-STILL_DIRTY=$(git status --porcelain | grep -vE "^  " || true)
-if [[ -n "$STILL_DIRTY" ]]; then
-    info "Note: You have other uncommitted changes in your workspace:"
-    echo "$STILL_DIRTY"
-    warn "I recommend committing your work manually before pushing."
+# Final blocker: Check for any remaining dirty code
+DIRTY_REMAINING=$(git status --porcelain | grep -vE "^  " || true)
+if [[ -n "$DIRTY_REMAINING" ]]; then
+  divider
+  error "PUSH BLOCKED: You have uncommitted code changes."
+  echo "$DIRTY_REMAINING"
+  divider
+  info "RODIN Protocol requires all functional changes to be committed manually."
+  info "Please review and commit your work before pushing."
+  exit 1
 fi
 
-success "Formatting step completed."
+success "Integrity check passed."
 
 # ── 1. Synchronization Check ────────────────────────────────────────────────
 header "🔄 Step 1: Synchronization check"
