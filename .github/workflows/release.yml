@@ -46,10 +46,9 @@ jobs:
         with:
           publish: pnpm changeset publish
           version: pnpm changeset version
-          commit: "chore(release): version packages"
-          title: "chore(release): version packages"
+          commit: "chore(release): bump monorepo versions"
+          title: "chore(release): bump monorepo versions"
           createGithubReleases: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
