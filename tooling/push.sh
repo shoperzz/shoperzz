@@ -54,21 +54,42 @@ fi
 # ── 0. Formatting Check ──────────────────────────────────────────────────────
 header "✨ Step 0: Formatting check"
 
+# Snapshot of modified files BEFORE formatting
+FILES_DIRTY_BEFORE=$(git diff --name-only)
+
 info "Running automated formatting..."
 pnpm format --write > /dev/null 2>&1 || true
 
-# Check for modified files after formatting
-DIRTY_FILES=$(git status --porcelain)
-if [[ -n "$DIRTY_FILES" ]]; then
-  warn "Formatting corrections applied to focal files."
+# Snapshot of modified files AFTER formatting
+FILES_DIRTY_AFTER=$(git diff --name-only)
+
+# Identify files specifically touched by Prettier
+FILES_FIXED=$(comm -13 <(echo "$FILES_DIRTY_BEFORE" | sort) <(echo "$FILES_DIRTY_AFTER" | sort))
+
+if [[ -n "$FILES_FIXED" ]]; then
+  warn "Formatting corrections applied to:"
+  echo -e "${YELLOW}$FILES_FIXED${RESET}"
   divider
-  echo "$DIRTY_FILES"
-  divider
-  error "Formatting fixes detected. Please commit these changes before pushing."
-  info "Recommended: git commit -m \"style: format code according to standards\""
-  exit 1
+  read -rp "  Would you like to commit these formatting fixes automatically? (Y/n) " AUTO_COMMIT_FORMAT
+  if [[ "$AUTO_COMMIT_FORMAT" != "n" && "$AUTO_COMMIT_FORMAT" != "N" ]]; then
+    # Stage ONLY the files fixed by prettier
+    echo "$FILES_FIXED" | xargs git add
+    git commit -m "style: format code according to standards"
+    success "Formatting fixes committed."
+  else
+    warn "Formatting fixes pending. Remember to commit them."
+  fi
 fi
-success "Code matches the required formatting standards."
+
+# Remind user of other dirty files not touched by formatting
+STILL_DIRTY=$(git status --porcelain | grep -vE "^  " || true)
+if [[ -n "$STILL_DIRTY" ]]; then
+    info "Note: You have other uncommitted changes in your workspace:"
+    echo "$STILL_DIRTY"
+    warn "I recommend committing your work manually before pushing."
+fi
+
+success "Formatting step completed."
 
 # ── 1. Synchronization Check ────────────────────────────────────────────────
 header "🔄 Step 1: Synchronization check"
@@ -119,8 +140,29 @@ if echo "$FILES_CHANGED" | grep -E "^(packages|plugins)/" > /dev/null; then
     warn "No changeset detected for package/plugin changes."
     read -rp "  Would you like to run 'pnpm changeset' now? (Y/n) " RUN_CHANGESET
     if [[ "$RUN_CHANGESET" != "n" && "$RUN_CHANGESET" != "N" ]]; then
+      # Identify changeset files BEFORE running the command
+      CHANGESETS_BEFORE=$(ls .changeset/*.md 2>/dev/null || true)
+      
       pnpm changeset
-      success "Changeset created. Please commit it before pushing if not automated."
+      success "Changeset created."
+      
+      # Identify the specific NEW changeset file
+      CHANGESETS_AFTER=$(ls .changeset/*.md 2>/dev/null || true)
+      NEW_CHANGESET=$(comm -13 <(echo "$CHANGESETS_BEFORE" | sort) <(echo "$CHANGESETS_AFTER" | sort))
+      
+      if [[ -n "$NEW_CHANGESET" ]]; then
+        # Extract core version for a professional commit message
+        CURRENT_VERSION=$(node -p "require('./packages/core/package.json').version")
+        
+        read -rp "  Would you like to commit the new changeset ($NEW_CHANGESET) automatically? (Y/n) " AUTO_COMMIT_CHANGESET
+        if [[ "$AUTO_COMMIT_CHANGESET" != "n" && "$AUTO_COMMIT_CHANGESET" != "N" ]]; then
+          git add "$NEW_CHANGESET"
+          git commit -m "chore(release): prepare v$CURRENT_VERSION"
+          success "Changeset $NEW_CHANGESET committed."
+        else
+          warn "New changeset $NEW_CHANGESET is not committed."
+        fi
+      fi
     else
       warn "Proceeding without changeset (not recommended for releases)."
     fi
