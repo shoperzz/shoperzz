@@ -25,4 +25,4 @@ shoperzz --help
 
 ## License
 
-Apache-2.0 © Shoperzz
+GPL-3.0-or-later © Shoperzz
