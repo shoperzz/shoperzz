@@ -35,19 +35,25 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
 
-      # Changesets orchestrates everything:
-      # Case 1 — .changeset/*.md exist on main
-      #   → creates a PR "chore(release): version packages"
-      # Case 2 — The version PR is merged
-      #   → bumps versions, publishes to npm, creates git tags and GitHub Releases
+      # 1. We run versioning first to get the new version numbers
+      - name: Versioning
+        run: pnpm changeset version
+
+      # 2. Extract the new version from core (Source of Truth)
+      - name: Get core version
+        id: get_version
+        run: |
+          VERSION=$(node -p "require('./packages/core/package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      # 3. Create the PR with the dynamic message
       - name: Create Release PR or Publish
         id: changesets
         uses: changesets/action@v1
         with:
           publish: pnpm changeset publish
-          version: pnpm changeset version
-          commit: "chore(release): bump monorepo versions"
-          title: "chore(release): bump monorepo versions"
+          commit: "chore(release): v${{ steps.get_version.outputs.version }}"
+          title: "chore(release): v${{ steps.get_version.outputs.version }}"
           createGithubReleases: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
