@@ -53,14 +53,3 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      # Discord notification after successful publish
-      - name: Notify Discord
-        if: steps.changesets.outputs.published == 'true'
-        uses: Ilshidur/action-discord@master
-        with:
-          args: |
-            🚀 **New Shoperzz Release Published**
-            Packages: ${{ steps.changesets.outputs.publishedPackages }}
-            → https://github.com/${{ github.repository }}/releases
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
