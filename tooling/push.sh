@@ -35,34 +35,24 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-# ── 0. Integrity & Branch Check ──────────────────────────────────────────────
-header "✨ Step 0: Integrity check"
+# ── 0. Modular Audit & Integrity Check ───────────────────────────────────────
+header "✨ Step 0: Integrity & Version Audit"
 
-# 1. Essential Git Checks
-if ! git rev-parse --git-dir > /dev/null 2>&1; then
-  error "This directory is not a git repository."
-  exit 1
-fi
-
+# 1. Essential Git & Branch Checks
 LOCAL_BRANCH=$(git branch --show-current)
 if [[ -z "$LOCAL_BRANCH" ]]; then
   error "You are in 'detached HEAD' mode. Return to a branch before pushing."
   exit 1
 fi
 
-# Function to get core version
-get_core_version() {
-  node -p "require('./packages/core/package.json').version"
+# 2. Critical Version Audit (Remote vs Local)
+bash ./tooling/audit/version-audit.sh || {
+  divider
+  error "ABORTING: Version inconsistency detected."
+  info "Please resolve the conflict manually or via 'git pull' before pushing."
+  exit 1
 }
 
-# Identify different types of uncommitted changes
-DIRTY_CHANGESETS=$(git status --porcelain | grep ".changeset/.*\.md" | awk '{print $2}' || true)
-DIRTY_CODE=$(git status --porcelain | grep -v ".changeset/.*\.md" | awk '{print $2}' || true)
-
-# Handle existing Changesets (Proactive Automation)
-if [[ -n "$DIRTY_CHANGESETS" ]]; then
-  warn "Uncommitted changesets detected:"
-  echo -e "${YELLOW}$DIRTY_CHANGESETS${RESET}"
   VERSION=$(get_core_version)
   read -rp "  Apply automated commit 'chore(release): dump v$VERSION'? (Y/n) " AUTO_COMMIT_CS
   if [[ "$AUTO_COMMIT_CS" != "n" && "$AUTO_COMMIT_CS" != "N" ]]; then
@@ -119,10 +109,22 @@ if git remote get-url upstream > /dev/null 2>&1; then
   git fetch upstream dev --quiet
   BEHIND=$(git rev-list --count "HEAD..upstream/dev")
   
-  if [[ "$BEHIND" -gt 0 ]]; then
-    warn "Your branch is ${BOLD}$BEHIND commit(s) behind${RESET} upstream/dev."
-    error "Please run 'pnpm sync' before pushing."
-    exit 1
+    bash ./tooling/version/manage-intent.sh
+    # Get the predicted version for the commit message
+    NEXT_VERSION=$(./tooling/version/get-next-version.sh)
+    # Auto-commit the new intent
+    read -p "Souhaitez-vous commiter cette intention (v${NEXT_VERSION}) automatiquement ? (Y/n) " AUTO_COMMIT
+    if [[ "$AUTO_COMMIT" =~ ^[Yy]$ || -z "$AUTO_COMMIT" ]]; then
+       git add .changeset/*.md .changeset/pre.json 2>/dev/null || true
+       git commit -m "chore(release): v${NEXT_VERSION}"
+       success "Intention v${NEXT_VERSION} commitée."
+    fi
+  else
+    if [[ "$BEHIND" -gt 0 ]]; then
+      warn "Your branch is ${BOLD}$BEHIND commit(s) behind${RESET} upstream/dev."
+      error "Please run 'pnpm sync' before pushing."
+      exit 1
+    fi
   fi
   success "Branch is synchronized with upstream/dev."
 else
@@ -172,7 +174,7 @@ if echo "$FILES_CHANGED" | grep -E "^(packages|plugins)/" > /dev/null; then
       
       if [[ -n "$NEW_CHANGESET" ]]; then
         # Extract core version for a professional commit message
-        CURRENT_VERSION=$(node -p "require('./packages/core/package.json').version")
+        CURRENT_VERSION=$(./tooling/version/get-next-version.sh)
         
         read -rp "  Would you like to commit the new changeset ($NEW_CHANGESET) automatically? (Y/n) " AUTO_COMMIT_CHANGESET
         if [[ "$AUTO_COMMIT_CHANGESET" != "n" && "$AUTO_COMMIT_CHANGESET" != "N" ]]; then
