@@ -13,6 +13,7 @@ BLUE='\033[0;34m'
 CYAN='\033[0;36m'
 BOLD='\033[1m'
 RESET='\033[0m'
+NC='\033[0m'
 
 info()    { echo -e "${BLUE}ℹ${RESET}  $*"; }
 success() { echo -e "${GREEN}✓${RESET}  $*"; }
