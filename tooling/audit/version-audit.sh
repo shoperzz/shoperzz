@@ -1,66 +1,63 @@
-#!/bin/bash
-# ── Audit de Cohérence de Version Shoperzz ──────────────────────────────────
-# Ce script vérifie que le local et le distant sont synchronisés.
+# ── Shoperzz Version Consistency Audit ──────────────────────────────────────
+# This script ensures local and remote environments are synchronized.
 
 set -e
 
-# Couleurs
+# Colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
-# Fonctions utilitaires
+# Helpers
 info() { echo -e "${BLUE}ℹ  $1${NC}"; }
 success() { echo -e "${GREEN}✓  $1${NC}"; }
 warn() { echo -e "${YELLOW}⚠  $1${NC}"; }
 error() { echo -e "${RED}✖  $1${NC}"; }
 
-# 1. Récupération de la version locale (Source: @shoperzz/core)
+# 1. Get local version (Source: @shoperzz/core)
 LOCAL_VERSION=$(node -p "require('./packages/core/package.json').version")
-info "Version locale détectée (@shoperzz/core) : ${LOCAL_VERSION}"
+info "Detected local version (@shoperzz/core): ${LOCAL_VERSION}"
 
-# 2. Récupération des tags distants
-info "Synchronisation des tags depuis GitHub..."
-git fetch --tags origin > /dev/null 2>&1 || warn "Impossible de fetch les tags (vérifiez votre connexion ou SSH)."
+# 2. Sync remote tags
+info "Synchronizing tags from GitHub..."
+git fetch --tags origin > /dev/null 2>&1 || warn "Could not fetch tags (check connection or SSH)."
 
-# 3. Identification du dernier tag officiel (format vX.Y.Z*)
-# On cherche le tag le plus élevé qui commence par 'v'
+# 3. Identify last official tag (vX.Y.Z*)
 REMOTE_TAG=$(git tag -l "v*" --sort=-v:refname | head -n 1)
 
 if [[ -z "$REMOTE_TAG" ]]; then
-  success "Aucun tag distant trouvé. Premier déploiement ?"
+  success "No remote tags found. Initial deployment?"
   exit 0
 fi
 
-# Extraction de la version du tag (on enlève le 'v' initial)
+# Extract version from tag
 REMOTE_VERSION="${REMOTE_TAG#v}"
-info "Dernier tag détecté sur GitHub : ${REMOTE_TAG}"
+info "Found remote tag on GitHub: ${REMOTE_TAG}"
 
-# 4. Comparaison Logique (SemVer simple)
+# 4. Logical Comparison (SemVer)
 if [[ "$LOCAL_VERSION" == "$REMOTE_VERSION" ]]; then
-  success "Cohérence parfaite : Local (${LOCAL_VERSION}) == Distant (${REMOTE_VERSION})"
+  success "Perfect consistency: Local (${LOCAL_VERSION}) == Remote (${REMOTE_VERSION})"
   exit 0
 fi
 
-# Cas de conflit : Local < Distant
-# Note: On utilise node pour une comparaison SemVer robuste
+# Conflict: Local < Remote
 IS_BEHIND=$(node -p "require('semver').lt('$LOCAL_VERSION', '$REMOTE_VERSION') ? 'true' : 'false'" 2>/dev/null || echo "unknown")
 
 if [[ "$IS_BEHIND" == "true" ]]; then
-  error "CONFLIT DÉTECTÉ : Votre version locale ($LOCAL_VERSION) est INFÉRIEURE au tag distant ($REMOTE_VERSION)."
-  warn "Cela arrive si un bot ou un autre collaborateur a déjà poussé une version supérieure."
-  warn "Action recommandée : Faites un 'git pull' ou ajustez votre intention de version."
+  error "CONFLICT DETECTED: Your local version ($LOCAL_VERSION) is BEHIND remote tag ($REMOTE_VERSION)."
+  warn "This happens if a bot or another contributor already pushed a higher version."
+  warn "Action: Use 'git pull' or adjust your release intent."
   exit 1
 elif [[ "$IS_BEHIND" == "false" ]]; then
-  success "Progression validée : Votre version ($LOCAL_VERSION) est supérieure au tag distant ($REMOTE_VERSION)."
+  success "Version progression validated: Local ($LOCAL_VERSION) > Remote ($REMOTE_VERSION)."
   exit 0
 else
-  # Fallback si semver n'est pas installé globalement (on utilise une comparaison de string basique)
-  warn "Comparaison SemVer simplifiée (npm 'semver' non détecté)..."
+  # Fallback basic string comparison
+  warn "Using simple string comparison (semver package not detected)..."
   if [[ "$LOCAL_VERSION" < "$REMOTE_VERSION" ]]; then
-    error "Conflit probable : $LOCAL_VERSION < $REMOTE_VERSION"
+    error "Likely conflict: $LOCAL_VERSION < $REMOTE_VERSION"
     exit 1
   fi
 fi

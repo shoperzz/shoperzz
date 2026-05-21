@@ -1,11 +1,11 @@
 #!/bin/bash
-# ── Gestionnaire d'Intention de Version Shoperzz ────────────────────────────
-# Ce script pilote Changeset pour créer des intentions de release.
+# ── Shoperzz Release Intent Manager ─────────────────────────────────────────
+# This script pilots Changesets to create release intents.
 
 set -e
 
-# Couleurs
-NC='\033[ NC='\033[0m'
+# Colors
+NC='\033[0m'
 BLUE='\033[0;34m'
 YELLOW='\033[1;33m'
 GREEN='\033[0;32m'
@@ -16,33 +16,33 @@ header() {
   echo -e "${CYAN}────────────────────────────────────────${NC}"
 }
 
-# 1. Menu principal
+# 1. Main menu
 header
-echo -e "Quelle est l'intention de ce changement ?"
+echo -e "What is the intent of this change?"
 echo -e "  [1] ${GREEN}Prerelease${NC} (Alpha, Beta, RC)"
-echo -e "  [2] ${GREEN}Patch${NC}      (Bugs, corrections mineures)"
-echo -e "  [3] ${GREEN}Minor${NC}      (Nouvelles fonctionnalités)"
-echo -e "  [4] ${GREEN}Major${NC}      (Changements majeurs, ruptures)"
-echo -e "  [q] Quitter"
+echo -e "  [2] ${GREEN}Patch${NC}      (Bugs, minor fixes)"
+echo -e "  [3] ${GREEN}Minor${NC}      (New features)"
+echo -e "  [4] ${GREEN}Major${NC}      (Breaking changes, big features)"
+echo -e "  [q] Quit"
 
-read -p "Votre choix : " INTENT
+read -p "Your choice: " INTENT
 
 case $INTENT in
   1)
-    echo -e "\nType de prerelease :"
+    echo -e "\nPrerelease type:"
     echo -e "  [a] alpha"
     echo -e "  [b] beta"
     echo -e "  [r] rc"
-    read -p "Choix : " PRE_TYPE
+    read -p "Choice: " PRE_TYPE
     TAG="alpha"
     [[ "$PRE_TYPE" == "b" ]] && TAG="beta"
     [[ "$PRE_TYPE" == "r" ]] && TAG="rc"
 
-    echo -e "\n${BLUE}ℹ  Passage en mode PRE (${TAG})...${NC}"
-    # On entre en mode PRE (Changeset gère le fichier pre.json s'il n'existe pas)
+    echo -e "\n${BLUE}ℹ  Entering PRE mode (${TAG})...${NC}"
+    # Enter PRE mode (Changeset handles pre.json)
     pnpm changeset pre enter $TAG
     
-    echo -e "${BLUE}ℹ  Création du changeset...${NC}"
+    echo -e "${BLUE}ℹ  Creating changeset...${NC}"
     pnpm changeset add
     ;;
   2)
@@ -55,9 +55,9 @@ case $INTENT in
     pnpm changeset add --major
     ;;
   q|*)
-    echo "Opération annulée."
+    echo "Operation cancelled."
     exit 0
     ;;
 esac
 
-echo -e "\n${GREEN}✓  Intention enregistrée avec succès.${NC}"
+echo -e "\n${GREEN}✓  Intent recorded successfully.${NC}"
