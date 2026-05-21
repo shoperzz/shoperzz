@@ -1,0 +1,11 @@
+{
+  "mode": "pre",
+  "tag": "alpha",
+  "initialVersions": {
+    "@shoperzz/cli": "0.0.1-alpha.0",
+    "@shoperzz/common": "0.0.1-alpha.0",
+    "@shoperzz/core": "0.0.1-alpha.0",
+    "@shoperzz/testing": "0.0.1-alpha.0"
+  },
+  "changesets": []
+}
