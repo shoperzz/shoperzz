@@ -1,12 +1,11 @@
 #!/usr/bin/env bash
 # ─────────────────────────────────────────────────────────────────────────────
-# push.sh — Secure and automated push script for Shoperzz monorepo
-# Usage: ./tooling/push.sh [--no-verify] [--force]
+# push.sh — "Elite" Push Orchestrator for Shoperzz Monorepo
 # ─────────────────────────────────────────────────────────────────────────────
 
 set -euo pipefail
 
-# ── Colors ───────────────────────────────────────────────────────────────────
+# ── Colors & Style ───────────────────────────────────────────────────────────
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -14,73 +13,46 @@ BLUE='\033[0;34m'
 CYAN='\033[0;36m'
 BOLD='\033[1m'
 RESET='\033[0m'
+NC='\033[0m'
 
-# ── Helpers ──────────────────────────────────────────────────────────────────
 info()    { echo -e "${BLUE}ℹ${RESET}  $*"; }
 success() { echo -e "${GREEN}✓${RESET}  $*"; }
 warn()    { echo -e "${YELLOW}⚠${RESET}  $*"; }
 error()   { echo -e "${RED}✖${RESET}  $*"; }
 header()  { echo -e "\n${BOLD}${CYAN}$*${RESET}"; }
-divider() { echo -e "${CYAN}────────────────────────────────────────${RESET}"; }
+divider() { echo -e "${CYAN}────────────────────────────────────────${NC}"; }
 
-# ── Arguments ────────────────────────────────────────────────────────────────
+# ── ARGUMENTS ────────────────────────────────────────────────────────────────
 SKIP_VERIFY=false
-FORCE_PUSH=false
+[[ "$*" == *"--no-verify"* ]] && SKIP_VERIFY=true
 
-while [[ $# -gt 0 ]]; do
-  case $1 in
-    --no-verify) SKIP_VERIFY=true; shift ;;
-    --force)     FORCE_PUSH=true; shift ;;
-    *)           shift ;;
-  esac
-done
+# ── STEP 0: Integrity & Version Audit ────────────────────────────────────────
+header "✨ Step 0: Version & Git Audit"
 
-# ── 0. Integrity & Branch Check ──────────────────────────────────────────────
-header "✨ Step 0: Integrity check"
-
-# 1. Essential Git Checks
-if ! git rev-parse --git-dir > /dev/null 2>&1; then
-  error "This directory is not a git repository."
-  exit 1
-fi
-
+# 1. Branch verification
 LOCAL_BRANCH=$(git branch --show-current)
 if [[ -z "$LOCAL_BRANCH" ]]; then
-  error "You are in 'detached HEAD' mode. Return to a branch before pushing."
+  error "You are in 'detached HEAD' mode. Please return to a branch."
   exit 1
 fi
 
-# Function to get core version
-get_core_version() {
-  node -p "require('./packages/core/package.json').version"
+# 2. Call Audit Module (Verifies GitHub Tags vs Local)
+bash ./tooling/audit/version-audit.sh || {
+  divider
+  error "ABORTED: Version inconsistency detected."
+  info "Please resolve the conflict manually or via 'git pull' before pushing."
+  exit 1
 }
 
-# Identify different types of uncommitted changes
-DIRTY_CHANGESETS=$(git status --porcelain | grep ".changeset/.*\.md" | awk '{print $2}' || true)
-DIRTY_CODE=$(git status --porcelain | grep -v ".changeset/.*\.md" | awk '{print $2}' || true)
+# ── STEP 1: Formatting Audit (Surgical) ──────────────────────────────────────
+header "✨ Step 1: Formatting Audit"
 
-# Handle existing Changesets (Proactive Automation)
-if [[ -n "$DIRTY_CHANGESETS" ]]; then
-  warn "Uncommitted changesets detected:"
-  echo -e "${YELLOW}$DIRTY_CHANGESETS${RESET}"
-  VERSION=$(get_core_version)
-  read -rp "  Apply automated commit 'chore(release): dump v$VERSION'? (Y/n) " AUTO_COMMIT_CS
-  if [[ "$AUTO_COMMIT_CS" != "n" && "$AUTO_COMMIT_CS" != "N" ]]; then
-    echo "$DIRTY_CHANGESETS" | xargs git add
-    git commit -m "chore(release): dump v$VERSION"
-    success "Changesets committed."
-    # Refresh dirty code list
-    DIRTY_CODE=$(git status --porcelain | grep -v ".changeset/.*\.md" | awk '{print $2}' || true)
-  fi
-fi
-
-# Run Formatting
-info "Running automated formatting..."
 FILES_DIRTY_BEFORE=$(git diff --name-only)
-pnpm format --write > /dev/null 2>&1 || true
+info "Running Prettier on modified files..."
+pnpm format > /dev/null 2>&1 || true
 FILES_DIRTY_AFTER=$(git diff --name-only)
 
-# Identify files specifically fixed by Prettier
+# Identify files fixed by Prettier
 FILES_FIXED=$(comm -13 <(echo "$FILES_DIRTY_BEFORE" | sort) <(echo "$FILES_DIRTY_AFTER" | sort))
 
 if [[ -n "$FILES_FIXED" ]]; then
@@ -92,49 +64,44 @@ if [[ -n "$FILES_FIXED" ]]; then
     git commit -m "style: format code according to standards"
     success "Formatting committed."
   else
-    error "Push blocked: Formatting fixes must be committed."
+    error "Push blocked: Style fixes must be committed."
     exit 1
   fi
 fi
 
-# Final blocker: Check for any remaining dirty code
-DIRTY_REMAINING=$(git status --porcelain | grep -vE "^  " || true)
-if [[ -n "$DIRTY_REMAINING" ]]; then
-  divider
-  error "PUSH BLOCKED: You have uncommitted code changes."
-  echo "$DIRTY_REMAINING"
-  divider
-  info "RODIN Protocol requires all functional changes to be committed manually."
-  info "Please review and commit your work before pushing."
-  exit 1
-fi
+# ── STEP 2: Intent & Release Management ──────────────────────────────────────
+header "✨ Step 2: Intent & Release Management (Changesets)"
 
-success "Integrity check passed."
+# Detect existing changesets
+CHANGESETS=$(ls .changeset/*.md 2>/dev/null | grep -v "README.md" || true)
 
-# ── 1. Synchronization Check ────────────────────────────────────────────────
-header "🔄 Step 1: Synchronization check"
-
-info "Checking connection to upstream..."
-if git remote get-url upstream > /dev/null 2>&1; then
-  git fetch upstream dev --quiet
-  BEHIND=$(git rev-list --count "HEAD..upstream/dev")
-  
-  if [[ "$BEHIND" -gt 0 ]]; then
-    warn "Your branch is ${BOLD}$BEHIND commit(s) behind${RESET} upstream/dev."
-    error "Please run 'pnpm sync' before pushing."
-    exit 1
+if [[ -z "$CHANGESETS" ]]; then
+  warn "No changeset detected. Your changes will NOT be versioned."
+  read -p "Would you like to declare a release intent now? (Y/n) " ADD_INTENT
+  if [[ "$ADD_INTENT" =~ ^[Yy]$ ]]; then
+    # Call Intent Module
+    bash ./tooling/version/manage-intent.sh
+    
+    # Get predicted version for the commit message
+    NEXT_VERSION=$(./tooling/version/get-next-version.sh)
+    
+    read -p "Would you like to commit this intent (v${NEXT_VERSION}) automatically? (Y/n) " AUTO_COMMIT
+    if [[ "$AUTO_COMMIT" =~ ^[Yy]$ || -z "$AUTO_COMMIT" ]]; then
+       git add .changeset/*.md .changeset/pre.json 2>/dev/null || true
+       git commit -m "chore(release): v${NEXT_VERSION}"
+       success "Intent v${NEXT_VERSION} committed."
+    fi
   fi
-  success "Branch is synchronized with upstream/dev."
 else
-  warn "Remote 'upstream' not found. Skipping sync check."
+  info "Changesets detected: $(echo $CHANGESETS | wc -w) file(s)."
 fi
 
-# ── 2. Local Validation ──────────────────────────────────────────────────────
+# ── STEP 3: Quality Validation (Turbo) ───────────────────────────────────────
+header "🧪 Step 3: Quality Validation (Turbo)"
+
 if [[ "$SKIP_VERIFY" == "true" ]]; then
   warn "Skipping local validation (--no-verify)..."
 else
-  header "🧪 Step 2: Quality validation (Turbo)"
-  
   info "Running lint, typecheck, tests and commitlint..."
   if pnpm lint && pnpm typecheck && pnpm test && pnpm commitlint --from main; then
     success "All quality checks passed."
@@ -144,74 +111,49 @@ else
   fi
 fi
 
-# ── 3. Changeset Verification ────────────────────────────────────────────────
-header "🦋 Step 3: Changeset verification"
+# ── STEP 4: Final Security Check (RODIN Protocol) ────────────────────────────
+header "✨ Step 4: RODIN Security Audit"
 
-# Check if files in packages/ or plugins/ have changed
-FILES_CHANGED=$(git diff --name-only upstream/dev...HEAD 2>/dev/null || git diff --name-only origin/dev...HEAD 2>/dev/null || git diff --name-only main...HEAD)
+# Block if there's remaining "dirty" code (uncommitted functional changes)
+# We ignore changeset files and package.json which are managed by the bot
+DIRTY_REMAINING=$(git status --porcelain | grep -vE "^( |M| ) (.changeset/|package\.json)" || true)
 
-if echo "$FILES_CHANGED" | grep -E "^(packages|plugins)/" > /dev/null; then
-  info "Detected changes in packages or plugins."
-  
-  # Check if a new changeset file exists in this branch
-  CHANGESET_EXISTS=$(git diff --name-only upstream/dev...HEAD 2>/dev/null | grep ".changeset/.*\.md" || true)
-  
-  if [[ -z "$CHANGESET_EXISTS" ]]; then
-    warn "No changeset detected for package/plugin changes."
-    read -rp "  Would you like to run 'pnpm changeset' now? (Y/n) " RUN_CHANGESET
-    if [[ "$RUN_CHANGESET" != "n" && "$RUN_CHANGESET" != "N" ]]; then
-      # Identify changeset files BEFORE running the command
-      CHANGESETS_BEFORE=$(ls .changeset/*.md 2>/dev/null || true)
-      
-      pnpm changeset
-      success "Changeset created."
-      
-      # Identify the specific NEW changeset file
-      CHANGESETS_AFTER=$(ls .changeset/*.md 2>/dev/null || true)
-      NEW_CHANGESET=$(comm -13 <(echo "$CHANGESETS_BEFORE" | sort) <(echo "$CHANGESETS_AFTER" | sort))
-      
-      if [[ -n "$NEW_CHANGESET" ]]; then
-        # Extract core version for a professional commit message
-        CURRENT_VERSION=$(node -p "require('./packages/core/package.json').version")
-        
-        read -rp "  Would you like to commit the new changeset ($NEW_CHANGESET) automatically? (Y/n) " AUTO_COMMIT_CHANGESET
-        if [[ "$AUTO_COMMIT_CHANGESET" != "n" && "$AUTO_COMMIT_CHANGESET" != "N" ]]; then
-          git add "$NEW_CHANGESET"
-          git commit -m "chore(release): prepare v$CURRENT_VERSION"
-          success "Changeset $NEW_CHANGESET committed."
-        else
-          warn "New changeset $NEW_CHANGESET is not committed."
-        fi
-      fi
-    else
-      warn "Proceeding without changeset (not recommended for releases)."
-    fi
-  else
-    success "Changeset detected."
-  fi
-else
-  info "No package/plugin changes detected. Skipping changeset check."
+if [[ -n "$DIRTY_REMAINING" ]]; then
+  divider
+  error "PUSH BLOCKED: You have uncommitted functional changes."
+  echo "$DIRTY_REMAINING"
+  divider
+  info "RODIN Protocol requires all functional changes to be manually committed."
+  exit 1
 fi
 
-# ── 4. Atomic Protocol Reminder ──────────────────────────────────────────────
-header "⚛️  Step 4: Atomic Commit Protocol"
-info "Remember: One intention per commit. No sensitive data. Public scope."
-divider
+# ── STEP 5: Upstream Synchronization ─────────────────────────────────────────
+header "🔄 Step 5: Synchronization Audit"
 
-# ── 5. Push ──────────────────────────────────────────────────────────────────
-header "📤 Step 5: Pushing to origin"
+if git remote | grep -q "origin"; then
+    info "Checking alignment with origin/$LOCAL_BRANCH..."
+    git fetch origin "$LOCAL_BRANCH" > /dev/null 2>&1 || true
+    
+    BEHIND_COUNT=$(git rev-list --count HEAD..origin/"$LOCAL_BRANCH" 2>/dev/null || echo 0)
+    if [ "$BEHIND_COUNT" -gt 0 ]; then
+        error "Your branch is $BEHIND_COUNT commit(s) behind GitHub."
+        info "Please run 'pnpm sync' to align before pushing."
+        exit 1
+    fi
+    success "Branch is perfectly synchronized."
+fi
 
-PUSH_CMD="git push origin $LOCAL_BRANCH"
-[[ "$FORCE_PUSH" == "true" ]] && PUSH_CMD="$PUSH_CMD --force-with-lease"
+# ── STEP 6: Final Push ───────────────────────────────────────────────────────
+header "🚀 Step 6: Pushing to GitHub"
 
-info "Executing: ${BOLD}$PUSH_CMD${RESET}"
+info "Pushing $LOCAL_BRANCH to origin..."
 
-if $PUSH_CMD; then
-  echo ""
-  success "Successfully pushed to origin/$LOCAL_BRANCH!"
-  info "Next step: Open a Pull Request on GitHub if not already done."
-  divider
+if git push origin "$LOCAL_BRANCH"; then
+    divider
+    success "Push successful!"
+    info "Shoperzz Infrastructure is secure."
+    divider
 else
-  error "Push failed. Check if you need to use --force (if you rebased recently)."
-  exit 1
+    error "Push failed. Check connectivity or branch permissions."
+    exit 1
 fi
