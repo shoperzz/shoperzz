@@ -1,6 +1,6 @@
 {
   "name": "shoperzz",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "scripts": {
     "build": "turbo run build",
@@ -13,7 +13,7 @@
     "test": "turbo run test",
     "sync": "bash ./tooling/sync.sh",
     "push": "bash ./tooling/push.sh",
-    "version": "changeset version",
+    "version": "0.0.2",
     "release": "pnpm changeset publish"
   },
   "devDependencies": {

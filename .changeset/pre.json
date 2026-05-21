@@ -1,11 +1,11 @@
 {
   "mode": "pre",
-  "tag": "alpha",
+  "tag": "beta",
   "initialVersions": {
-    "@shoperzz/cli": "0.0.1-alpha.0",
-    "@shoperzz/common": "0.0.1-alpha.0",
-    "@shoperzz/core": "0.0.1-alpha.0",
-    "@shoperzz/testing": "0.0.1-alpha.0"
+    "@shoperzz/cli": "0.0.2",
+    "@shoperzz/common": "0.0.2",
+    "@shoperzz/core": "0.0.2",
+    "@shoperzz/testing": "0.0.2"
   },
   "changesets": [
     "great-wings-try",

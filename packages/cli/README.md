@@ -1,28 +1,42 @@
-# @shoperzz/cli
+<div align="center">
+  <img src="../../assets/logos/LOGO-COLORED-SVG.svg" alt="Shoperzz" width="300" />
+  <br/>
+  <p>
+    <strong>@shoperzz/cli</strong><br/>
+    The official command-line toolkit for Shoperzz developers.
+  </p>
 
-> The command-line interface for the Shoperzz ecosystem.
+  <div>
+    <img src="https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=node.js&logoColor=white" alt="Node.js">
+    <img src="https://img.shields.io/badge/TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript">
+    <img src="https://img.shields.io/badge/pnpm-F69220?style=flat-square&logo=pnpm&logoColor=white" alt="pnpm">
+    <img src="https://img.shields.io/npm/v/@shoperzz/cli?style=flat-square&logo=npm&color=CB3837" alt="npm version">
+  </div>
+</div>
 
-The Shoperzz CLI is the primary tool for scaffolding projects, managing plugins, and deploying the headless core. It streamlines the development workflow through a set of powerful commands.
+<br/>
 
-## Commands
+## Narrative Synthesis
 
-- `shoperzz init`: Initialize a new Shoperzz project.
-- `shoperzz plugin add`: Install a plugin from the repository.
-- `shoperzz build`: Prepare the monorepo for production.
-- `shoperzz doctor`: Verify the health of the Shoperzz installation.
+@shoperzz/cli is the gateway to the Shoperzz development ecosystem. It simplifies the setup of new projects, manages plugin scaffolding, and provides auditing tools for release governance, ensuring developers follow the Elite Standards from day one.
+
+## Key Technical Capabilities
+
+- **Scaffolding Engine**: Instant creation of Shoperzz projects, core modules, and specialized plugins.
+- **Release Auditing**: Integrated checks for version consistency and protocol compliance.
+- **African Localization**: Built-in presets for regional configurations during initial setup.
+- **DX First**: High-performance loaders and interactive prompts powered by Clack/Inquirer.
 
 ## Installation
 
 ```bash
-npm install -g @shoperzz/cli
+pnpm add -g @shoperzz/cli
 ```
 
-## Usage
+## Governance
 
-```bash
-shoperzz --help
-```
+This package follows the Elite Release Protocol. Versions and tags are managed automatically by the Shoperzz Release Bot.
 
-## License
+---
 
-GPL-3.0-or-later © Shoperzz
+[License: GPL-3.0-or-later](../../LICENSE.md) © Shoperzz

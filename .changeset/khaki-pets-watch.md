@@ -5,4 +5,4 @@
 "@shoperzz/cli": patch
 ---
 
-docs(monorepo): align package licenses with GPL-3.0 standards
+stabilization of release infrastructure, documentation refinement and CI updates

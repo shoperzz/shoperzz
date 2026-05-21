@@ -26,10 +26,44 @@ divider() { echo -e "${CYAN}─────────────────�
 SKIP_VERIFY=false
 [[ "$*" == *"--no-verify"* ]] && SKIP_VERIFY=true
 
-# ── STEP 0: Integrity & Version Audit ────────────────────────────────────────
-header "✨ Step 0: Version & Git Audit"
+# Detection of current track
+CURRENT_TRACK="Stable"
+[[ -f ".changeset/pre.json" ]] && CURRENT_TRACK=$(node -p "require('./.changeset/pre.json').tag" 2>/dev/null || echo "Prerelease")
 
-# 1. Branch verification
+# ── STEP 0: Version & Git Audit ───────────────────────────────────────
+header "✨ Step 0: Version & Git Audit"
+LOCAL_VERSION=$(node -p "require('./package.json').version")
+info "Detected local version (@shoperzz/core): $LOCAL_VERSION"
+
+# Registry Check (Elite Sync Logic)
+if command -v npm &> /dev/null; then
+    info "Checking NPM registry for @shoperzz/core..."
+    NPM_VERSION=$(npm info @shoperzz/core version 2>/dev/null || echo "0.0.0")
+    
+    # Check if we are behind NPM
+    IS_BEHIND=$(node -p "require('semver').lt('$LOCAL_VERSION', '$NPM_VERSION') ? 'true' : 'false'" 2>/dev/null || echo "false")
+    
+    if [ "$IS_BEHIND" == "true" ]; then
+        warn "VERSION CONFLICT: NPM is at $NPM_VERSION while you are at $LOCAL_VERSION."
+        warn "Your release bot will fail if you try to publish an existing version."
+        echo -e "${YELLOW}Would you like to align local packages and purge old changesets? (y/N)${RESET} "
+        read -r ALIGN_RESP
+        if [[ "$ALIGN_RESP" =~ ^([yY][eE][sS]|[yY])$ ]]; then
+            info "Aligning packages to $NPM_VERSION..."
+            # Robust update of all package.json version fields
+            find . -name "package.json" -not -path "*/node_modules/*" -exec sed -i "s/\"version\": \".*\"/\"version\": \"$NPM_VERSION\"/" {} +
+            
+            info "Purging obsolete changesets..."
+            find .changeset -name "*.md" ! -name "README.md" -delete
+            
+            success "Local environment synchronized with Registry."
+            info "Please run 'pnpm push' again to declare your new intent."
+            exit 0
+        fi
+    fi
+fi
+
+info "Synchronizing tags from GitHub..."
 LOCAL_BRANCH=$(git branch --show-current)
 if [[ -z "$LOCAL_BRANCH" ]]; then
   error "You are in 'detached HEAD' mode. Please return to a branch."
@@ -83,12 +117,13 @@ if [[ -z "$CHANGESETS" ]]; then
     bash ./tooling/version/manage-intent.sh
     
     # Get predicted version for the commit message
+    # We keep the full string to show exactly where we are going (including -beta.0)
     NEXT_VERSION=$(./tooling/version/get-next-version.sh)
     
-    read -p "Would you like to commit this intent (v${NEXT_VERSION}) automatically? (Y/n) " AUTO_COMMIT
+    read -p "Would you like to commit this intent (v${NEXT_VERSION} on ${CURRENT_TRACK^^}) automatically? (Y/n) " AUTO_COMMIT
     if [[ "$AUTO_COMMIT" =~ ^[Yy]$ || -z "$AUTO_COMMIT" ]]; then
        git add .changeset/*.md .changeset/pre.json 2>/dev/null || true
-       git commit -m "chore(release): v${NEXT_VERSION}"
+       git diff --staged --quiet || git commit -m "chore(release): v${NEXT_VERSION}"
        success "Intent v${NEXT_VERSION} committed."
     fi
   fi
