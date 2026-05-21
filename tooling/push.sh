@@ -26,10 +26,41 @@ divider() { echo -e "${CYAN}─────────────────�
 SKIP_VERIFY=false
 [[ "$*" == *"--no-verify"* ]] && SKIP_VERIFY=true
 
-# ── STEP 0: Integrity & Version Audit ────────────────────────────────────────
+# ── STEP 0: Version & Git Audit ────────────────────────────────────────
 header "✨ Step 0: Version & Git Audit"
+LOCAL_VERSION=$(node -p "require('./package.json').version")
+info "Detected local version (@shoperzz/core): $LOCAL_VERSION"
 
-# 1. Branch verification
+# Registry Check (Elite Sync Logic)
+if command -v npm &> /dev/null; then
+    info "Checking NPM registry for @shoperzz/core..."
+    NPM_VERSION=$(npm info @shoperzz/core version 2>/dev/null || echo "0.0.0")
+    
+    # Check if we are behind NPM
+    IS_BEHIND=$(node -p "require('semver').lt('$LOCAL_VERSION', '$NPM_VERSION') ? 'true' : 'false'" 2>/dev/null || echo "false")
+    
+    if [ "$IS_BEHIND" == "true" ]; then
+        warn "VERSION CONFLICT: NPM is at $NPM_VERSION while you are at $LOCAL_VERSION."
+        warn "Your release bot will fail if you try to publish an existing version."
+        echo -e "${YELLOW}Would you like to align local packages and purge old changesets? (y/N)${RESET} "
+        read -r ALIGN_RESP
+        if [[ "$ALIGN_RESP" =~ ^([yY][eE][sS]|[yY])$ ]]; then
+            info "Aligning packages to $NPM_VERSION..."
+            # Update all package.json versions in context
+            find packages -name "package.json" -exec sed -i "s/\"version\": \"$LOCAL_VERSION\"/\"version\": \"$NPM_VERSION\"/g" {} +
+            sed -i "s/\"version\": \"$LOCAL_VERSION\"/\"version\": \"$NPM_VERSION\"/g" package.json
+            
+            info "Purging obsolete changesets..."
+            find .changeset -name "*.md" ! -name "README.md" -delete
+            
+            success "Local environment synchronized with Registry."
+            info "Please run 'pnpm push' again to declare your new intent."
+            exit 0
+        fi
+    fi
+fi
+
+info "Synchronizing tags from GitHub..."
 LOCAL_BRANCH=$(git branch --show-current)
 if [[ -z "$LOCAL_BRANCH" ]]; then
   error "You are in 'detached HEAD' mode. Please return to a branch."
