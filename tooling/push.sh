@@ -26,7 +26,11 @@ divider() { echo -e "${CYAN}─────────────────�
 SKIP_VERIFY=false
 [[ "$*" == *"--no-verify"* ]] && SKIP_VERIFY=true
 
-# ── STEP 0: Version & Git Audit ────────────────────────────────────────
+# Detection of current track
+CURRENT_TRACK="Stable"
+[[ -f ".changeset/pre.json" ]] && CURRENT_TRACK=$(node -p "require('./.changeset/pre.json').tag" 2>/dev/null || echo "Prerelease")
+
+# ── STEP 0: Version & Git Audit ───────────────────────────────────────
 header "✨ Step 0: Version & Git Audit"
 LOCAL_VERSION=$(node -p "require('./package.json').version")
 info "Detected local version (@shoperzz/core): $LOCAL_VERSION"
