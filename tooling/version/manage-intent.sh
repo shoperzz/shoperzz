@@ -84,6 +84,8 @@ case $CHOICE in
     echo -e "  [3] ${GREEN}Major${NC} (Breaking)"
     read -p "Choice: " LEVEL
     LEVEL_STR="patch"; [[ "$LEVEL" == "2" ]] && LEVEL_STR="minor"; [[ "$LEVEL" == "3" ]] && LEVEL_STR="major"
+    warn "PACKAGE SELECTION: Use SPACE to toggle/select packages, then ENTER to confirm."
+    info "Creating changeset..."
     pnpm changeset add --$LEVEL_STR
     ;;
   s)

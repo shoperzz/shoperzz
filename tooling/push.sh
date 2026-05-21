@@ -113,9 +113,10 @@ if [[ -z "$CHANGESETS" ]]; then
     bash ./tooling/version/manage-intent.sh
     
     # Get predicted version for the commit message
+    # We keep the full string to show exactly where we are going (including -beta.0)
     NEXT_VERSION=$(./tooling/version/get-next-version.sh)
     
-    read -p "Would you like to commit this intent (v${NEXT_VERSION}) automatically? (Y/n) " AUTO_COMMIT
+    read -p "Would you like to commit this intent (v${NEXT_VERSION} on ${CURRENT_TRACK^^}) automatically? (Y/n) " AUTO_COMMIT
     if [[ "$AUTO_COMMIT" =~ ^[Yy]$ || -z "$AUTO_COMMIT" ]]; then
        git add .changeset/*.md .changeset/pre.json 2>/dev/null || true
        git diff --staged --quiet || git commit -m "chore(release): v${NEXT_VERSION}"
