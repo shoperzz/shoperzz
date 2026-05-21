@@ -22,10 +22,10 @@
 
 ## Key Technical Capabilities
 
--   **Mock Providers**: Virtual implementations of payment gateways (Orange Money, Wave, etc.) and SMS services.
--   **Test Harnesses**: Isolated execution environments for plugin validation.
--   **Snapshot Utilities**: Comparison of complex transactional state transitions.
--   **African Data Dummies**: Ready-to-use profiles for orders, customers, and regional addresses.
+- **Mock Providers**: Virtual implementations of payment gateways (Orange Money, Wave, etc.) and SMS services.
+- **Test Harnesses**: Isolated execution environments for plugin validation.
+- **Snapshot Utilities**: Comparison of complex transactional state transitions.
+- **African Data Dummies**: Ready-to-use profiles for orders, customers, and regional addresses.
 
 ## Installation
 
@@ -47,4 +47,5 @@ const testEngine = new MockEngine();
 This package follows the Elite Release Protocol. Versions and tags are managed automatically by the Shoperzz Release Bot.
 
 ---
+
 [License: GPL-3.0-or-later](../../LICENSE.md) © Shoperzz

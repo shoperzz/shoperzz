@@ -22,10 +22,10 @@
 
 ## Key Technical Capabilities
 
--   **Scaffolding Engine**: Instant creation of Shoperzz projects, core modules, and specialized plugins.
--   **Release Auditing**: Integrated checks for version consistency and protocol compliance.
--   **African Localization**: Built-in presets for regional configurations during initial setup.
--   **DX First**: High-performance loaders and interactive prompts powered by Clack/Inquirer.
+- **Scaffolding Engine**: Instant creation of Shoperzz projects, core modules, and specialized plugins.
+- **Release Auditing**: Integrated checks for version consistency and protocol compliance.
+- **African Localization**: Built-in presets for regional configurations during initial setup.
+- **DX First**: High-performance loaders and interactive prompts powered by Clack/Inquirer.
 
 ## Installation
 
@@ -38,4 +38,5 @@ pnpm add -g @shoperzz/cli
 This package follows the Elite Release Protocol. Versions and tags are managed automatically by the Shoperzz Release Bot.
 
 ---
+
 [License: GPL-3.0-or-later](../../LICENSE.md) © Shoperzz

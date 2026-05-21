@@ -21,10 +21,10 @@
 
 ## Key Technical Capabilities
 
--   **Shared Domain Types**: Centralized definitions for order states, payment results, and customer profiles.
--   **Validation Logic**: Universal Zod-based validators for Africa-specific data formats.
--   **Security Utils**: Standardized encryption, hashing, and token handling.
--   **Constants & Enums**: The single source of truth for framework-wide configurations.
+- **Shared Domain Types**: Centralized definitions for order states, payment results, and customer profiles.
+- **Validation Logic**: Universal Zod-based validators for Africa-specific data formats.
+- **Security Utils**: Standardized encryption, hashing, and token handling.
+- **Constants & Enums**: The single source of truth for framework-wide configurations.
 
 ## Installation
 
@@ -37,4 +37,5 @@ pnpm add @shoperzz/common
 This package follows the Elite Release Protocol. Versions and tags are managed automatically by the Shoperzz Release Bot.
 
 ---
+
 [License: GPL-3.0-or-later](../../LICENSE.md) © Shoperzz

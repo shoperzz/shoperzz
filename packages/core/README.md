@@ -22,10 +22,10 @@
 
 ## Key Technical Capabilities
 
--   **Service Orchestration**: Atomic management of complex e-commerce workflows (Orders, Payments, Logistics).
--   **Plugin Architecture**: Seamless integration with the Shoperzz plugin ecosystem.
--   **Security First**: Built-in protection against common vulnerabilities and transactional fraud.
--   **African API Adapters**: Native handling of localization, currencies, and specialized regional services.
+- **Service Orchestration**: Atomic management of complex e-commerce workflows (Orders, Payments, Logistics).
+- **Plugin Architecture**: Seamless integration with the Shoperzz plugin ecosystem.
+- **Security First**: Built-in protection against common vulnerabilities and transactional fraud.
+- **African API Adapters**: Native handling of localization, currencies, and specialized regional services.
 
 ## Installation
 
@@ -52,4 +52,5 @@ engine.bootstrap().then(() => {
 This package follows the Elite Release Protocol. Versions and tags are managed automatically by the Shoperzz Release Bot.
 
 ---
+
 [License: GPL-3.0-or-later](../../LICENSE.md) © Shoperzz
