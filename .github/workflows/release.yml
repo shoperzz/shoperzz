@@ -35,25 +35,22 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
 
-      # 1. We run versioning first to get the new version numbers
-      - name: Versioning
-        run: pnpm changeset version
-
-      # 2. Extract the new version from core (Source of Truth)
-      - name: Get core version
-        id: get_version
+      # 1. Extract the predicted next version for the PR title
+      - name: Get next version
+        id: next_version
         run: |
-          VERSION=$(node -p "require('./packages/core/package.json').version")
+          VERSION=$(./tooling/version/get-next-version.sh)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-      # 3. Create the PR with the dynamic message
+      # 2. Runs versioning or publish via the official action
       - name: Create Release PR or Publish
         id: changesets
         uses: changesets/action@v1
         with:
+          version: pnpm changeset version
           publish: pnpm changeset publish
-          commit: "chore(release): v${{ steps.get_version.outputs.version }}"
-          title: "chore(release): v${{ steps.get_version.outputs.version }}"
+          commit: "chore(release): v${{ steps.next_version.outputs.version }}"
+          title: "chore(release): v${{ steps.next_version.outputs.version }}"
           createGithubReleases: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -67,10 +64,10 @@ jobs:
         run: |
           # Use our custom aggregation script
           bash ./tooling/make-release-description.sh
-          
+
           # Extract version again for the tag name
           VERSION="v$(node -p "require('./packages/core/package.json').version")"
-          
+
           # Create the unified tag and release using GitHub CLI
           gh release create "$VERSION" \
             --title "Shoperzz $VERSION" \

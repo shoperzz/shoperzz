@@ -13,7 +13,8 @@
     "test": "turbo run test",
     "sync": "bash ./tooling/sync.sh",
     "push": "bash ./tooling/push.sh",
-    "release": "changeset publish"
+    "version": "changeset version",
+    "release": "pnpm changeset publish"
   },
   "devDependencies": {
     "@changesets/cli": "^2.30.0",
