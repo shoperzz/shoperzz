@@ -55,21 +55,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      # 4. Create a single, professional Unified Release on GitHub
-      - name: Create Unified GitHub Release
-        if: steps.changesets.outputs.published == 'true'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          # Use our custom aggregation script
-          bash ./tooling/make-release-description.sh
-
-          # Extract version again for the tag name
-          VERSION="v$(node -p "require('./packages/core/package.json').version")"
-
-          # Create the unified tag and release using GitHub CLI
-          gh release create "$VERSION" \
-            --title "Shoperzz $VERSION" \
-            --notes-file RELEASE.md \
-            --target main
