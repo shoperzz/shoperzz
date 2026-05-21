@@ -7,5 +7,8 @@
     "@shoperzz/core": "0.0.2",
     "@shoperzz/testing": "0.0.2"
   },
-  "changesets": []
+  "changesets": [
+    "great-wings-try",
+    "short-nights-lie"
+  ]
 }
