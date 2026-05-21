@@ -19,7 +19,11 @@ success() { echo -e "${GREEN}✓${RESET}  $*"; }
 warn()    { echo -e "${YELLOW}⚠${RESET}  $*"; }
 error()   { echo -e "${RED}✖${RESET}  $*"; }
 header()  { echo -e "\n${BOLD}${CYAN}$*${RESET}"; }
-divider() { echo -e "${CYAN}────────────────────────────────────────${RESET}"; }
+divider() { echo -e "${CYAN}────────────────────────────────────────${NC}"; }
+
+# ── ARGUMENTS ────────────────────────────────────────────────────────────────
+SKIP_VERIFY=false
+[[ "$*" == *"--no-verify"* ]] && SKIP_VERIFY=true
 
 # ── STEP 0: Integrity & Version Audit ────────────────────────────────────────
 header "✨ Step 0: Version & Git Audit"
@@ -91,8 +95,23 @@ else
   info "Changesets detected: $(echo $CHANGESETS | wc -w) file(s)."
 fi
 
-# ── STEP 3: Final Security Check (RODIN Protocol) ────────────────────────────
-header "✨ Step 3: RODIN Security Audit"
+# ── STEP 3: Quality Validation (Turbo) ───────────────────────────────────────
+header "🧪 Step 3: Quality Validation (Turbo)"
+
+if [[ "$SKIP_VERIFY" == "true" ]]; then
+  warn "Skipping local validation (--no-verify)..."
+else
+  info "Running lint, typecheck, tests and commitlint..."
+  if pnpm lint && pnpm typecheck && pnpm test && pnpm commitlint --from main; then
+    success "All quality checks passed."
+  else
+    error "Quality checks failed. Fix errors before pushing."
+    exit 1
+  fi
+fi
+
+# ── STEP 4: Final Security Check (RODIN Protocol) ────────────────────────────
+header "✨ Step 4: RODIN Security Audit"
 
 # Block if there's remaining "dirty" code (uncommitted functional changes)
 # We ignore changeset files and package.json which are managed by the bot
@@ -107,8 +126,8 @@ if [[ -n "$DIRTY_REMAINING" ]]; then
   exit 1
 fi
 
-# ── STEP 4: Upstream Synchronization ─────────────────────────────────────────
-header "🔄 Step 4: Synchronization Audit"
+# ── STEP 5: Upstream Synchronization ─────────────────────────────────────────
+header "🔄 Step 5: Synchronization Audit"
 
 if git remote | grep -q "origin"; then
     info "Checking alignment with origin/$LOCAL_BRANCH..."
@@ -123,8 +142,8 @@ if git remote | grep -q "origin"; then
     success "Branch is perfectly synchronized."
 fi
 
-# ── STEP 5: Final Push ───────────────────────────────────────────────────────
-header "🚀 Step 5: Pushing to GitHub"
+# ── STEP 6: Final Push ───────────────────────────────────────────────────────
+header "🚀 Step 6: Pushing to GitHub"
 
 info "Pushing $LOCAL_BRANCH to origin..."
 
