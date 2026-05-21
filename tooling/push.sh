@@ -46,9 +46,8 @@ if command -v npm &> /dev/null; then
         read -r ALIGN_RESP
         if [[ "$ALIGN_RESP" =~ ^([yY][eE][sS]|[yY])$ ]]; then
             info "Aligning packages to $NPM_VERSION..."
-            # Update all package.json versions in context
-            find packages -name "package.json" -exec sed -i "s/\"version\": \"$LOCAL_VERSION\"/\"version\": \"$NPM_VERSION\"/g" {} +
-            sed -i "s/\"version\": \"$LOCAL_VERSION\"/\"version\": \"$NPM_VERSION\"/g" package.json
+            # Robust update of all package.json version fields
+            find . -name "package.json" -not -path "*/node_modules/*" -exec sed -i "s/\"version\": \".*\"/\"version\": \"$NPM_VERSION\"/" {} +
             
             info "Purging obsolete changesets..."
             find .changeset -name "*.md" ! -name "README.md" -delete

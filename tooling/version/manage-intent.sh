@@ -16,6 +16,25 @@ header() {
   echo -e "${CYAN}────────────────────────────────────────${NC}"
 }
 
+# Check for existing changesets to offer a reset
+EXISTING_CHANGESETS=$(find .changeset -name "*.md" ! -name "README.md" 2>/dev/null | wc -l)
+if [ "$EXISTING_CHANGESETS" -gt 0 ]; then
+  header
+  warn "Existing release intents found ($EXISTING_CHANGESETS file(s))."
+  echo -e "What would you like to do?"
+  echo -e "  [c] ${GREEN}Continue${NC} (Add to existing intents)"
+  echo -e "  [r] ${YELLOW}Reset${NC}    (Purge everything and start fresh)"
+  echo -e "  [q] Quit"
+  read -p "Choice: " ACTION
+  if [ "$ACTION" == "r" ]; then
+    info "Purging existing intents..."
+    find .changeset -name "*.md" ! -name "README.md" -delete
+    success "Intents purged."
+  elif [ "$ACTION" == "q" ]; then
+    exit 0
+  fi
+fi
+
 # 1. Main menu
 header
 echo -e "What is the intent of this change?"
@@ -38,11 +57,14 @@ case $INTENT in
     [[ "$PRE_TYPE" == "b" ]] && TAG="beta"
     [[ "$PRE_TYPE" == "r" ]] && TAG="rc"
 
-    echo -e "\n${BLUE}ℹ  Entering PRE mode (${TAG})...${NC}"
-    # Enter PRE mode (Changeset handles pre.json)
-    pnpm changeset pre enter $TAG
+    if [ -f ".changeset/pre.json" ]; then
+      info "Project is already in PRE mode. Skipping initiation..."
+    else
+      info "Entering PRE mode (${TAG})..."
+      pnpm changeset pre enter $TAG
+    fi
     
-    echo -e "${BLUE}ℹ  Creating changeset...${NC}"
+    info "Creating changeset..."
     pnpm changeset add
     ;;
   2)
