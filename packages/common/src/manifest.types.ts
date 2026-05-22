@@ -3,21 +3,21 @@
 // that claims a permission not listed here.
 // When adding a new permission, update the PluginRegistry validation logic as well.
 export type PluginPermission =
-  | 'order.read'
-  | 'order.write'
-  | 'order.cancel'
-  | 'payment.read'
-  | 'payment.write'
-  | 'payment.refund'
-  | 'webhook.receive'
-  | 'webhook.emit'
-  | 'customer.read'
-  | 'customer.write'
-  | 'product.read'
-  | 'product.write'
-  | 'notification.send'
-  | 'admin.read'
-  | 'admin.write'
+  | "order.read"
+  | "order.write"
+  | "order.cancel"
+  | "payment.read"
+  | "payment.write"
+  | "payment.refund"
+  | "webhook.receive"
+  | "webhook.emit"
+  | "customer.read"
+  | "customer.write"
+  | "product.read"
+  | "product.write"
+  | "notification.send"
+  | "admin.read"
+  | "admin.write";
 
 // Declarative manifest of a Shoperzz plugin.
 // Maps to the contents of shoperzz.plugin.yml at the root of each plugin package.
@@ -25,31 +25,38 @@ export type PluginPermission =
 // A malformed manifest stops the application at startup — no silent failures.
 export interface ShoperzzPluginManifest {
   // Canonical npm package name. Must be scoped under @shoperzz or @shoperzz-community.
-  name: string
+  name: string;
 
   // Must match the version in the plugin's package.json exactly.
-  version: string
+  version: string;
 
   // Human-readable label shown in logs and tooling output.
-  label: string
+  label: string;
 
   // Used for filtering in the npm registry and the plugin marketplace.
-  category: 'payment' | 'notification' | 'shipping' | 'marketplace' | 'analytics' | 'auth' | string
+  category:
+    | "payment"
+    | "notification"
+    | "shipping"
+    | "marketplace"
+    | "analytics"
+    | "auth"
+    | string;
 
   // All permissions must be declared upfront. No implicit grants at runtime.
-  permissions: PluginPermission[]
+  permissions: PluginPermission[];
 
   // Events this plugin emits to the bus. Convention: "domain.plugin-slug.action"
   // Example: "payment.orange-money.confirmed"
   // The PluginRegistry blocks emission of any event not listed here.
-  emits: string[]
+  emits: string[];
 
   // Events this plugin subscribes to. The bus only routes declared events to this plugin.
-  listens: string[]
+  listens: string[];
 
   // Other plugin package names that must be active before this plugin is loaded.
-  requires?: string[]
+  requires?: string[];
 
   // Relative paths from the plugin src/ directory to TypeORM migration files.
-  migrations?: string[]
+  migrations?: string[];
 }
