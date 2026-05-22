@@ -1,5 +1,11 @@
 # @shoperzz/cli
 
+## 0.0.3-beta.0
+
+### Patch Changes
+
+- d19ddc9: stabilization of release infrastructure, documentation refinement and CI updates
+
 ## 0.0.2-alpha.0
 
 ### Patch Changes
