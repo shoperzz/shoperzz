@@ -1,17 +1,17 @@
-import type { ShoperzzPluginStatic } from './plugin.types'
+import type { ShoperzzPluginStatic } from "./plugin.types";
 
 // Core engine options. These fine-tune the Shoperzz bootstrap process.
 // All fields are optional — the core applies sane defaults when omitted.
 export interface ShoperzzCoreConfig {
   // Base path mounted by the API router. Default: '/api'
-  apiPath?: string
+  apiPath?: string;
 
   // Default language (ISO 639-1). Default: 'en'
-  defaultLanguage?: string
+  defaultLanguage?: string;
 
   // Active currency codes (ISO 4217). First entry is the default currency.
   // Example: ['XOF', 'EUR']
-  currencies?: string[]
+  currencies?: string[];
 }
 
 // The master configuration object written by the developer in shoperzz.config.ts.
@@ -33,9 +33,9 @@ export interface ShoperzzCoreConfig {
 //   }
 //
 export interface ShoperzzConfig {
-  core?: ShoperzzCoreConfig
+  core?: ShoperzzCoreConfig;
 
   // Each plugin must be configured via its static .init() method before being listed here.
   // Plugins are registered in array order. The PluginRegistry validates each one at startup.
-  plugins: ShoperzzPluginStatic<unknown>[]
+  plugins: ShoperzzPluginStatic<unknown>[];
 }
