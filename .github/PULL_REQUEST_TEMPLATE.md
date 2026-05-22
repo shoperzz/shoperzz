@@ -9,6 +9,7 @@
 ## Release Track Target
 
 <!-- Which release track should this land on? Check one. -->
+
 - [ ] `alpha` (High risk, core rewriting)
 - [ ] `beta` (Moderate risk, new features/plugins)
 - [ ] `rc` (Low risk, stabilization before release)
@@ -22,5 +23,6 @@
 - [ ] **I have NOT run `pnpm CHANGESET commands`** manually (if this is a community PR). The maintainer will handle release intents.
 
 ---
-*For Maintainers:*
+
+_For Maintainers:_
 Run `pnpm push` on the `dev` branch to handle versioning after merge.
