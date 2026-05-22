@@ -1,37 +1,26 @@
 #!/usr/bin/env bash
-# ─────────────────────────────────────────────────────────────────────────────
-# push.sh — "Elite" Push Orchestrator for Shoperzz Monorepo
-# ─────────────────────────────────────────────────────────────────────────────
+# push.sh - Elite Push Orchestrator for Shoperzz Monorepo
 
 set -euo pipefail
 
-# ── Colors & Style ───────────────────────────────────────────────────────────
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-CYAN='\033[0;36m'
-BOLD='\033[1m'
-RESET='\033[0m'
-NC='\033[0m'
+# Source UI Theme & Helpers
+source "$(dirname "$0")/theme.sh"
 
-info()    { echo -e "${BLUE}ℹ${RESET}  $*"; }
-success() { echo -e "${GREEN}✓${RESET}  $*"; }
-warn()    { echo -e "${YELLOW}⚠${RESET}  $*"; }
-error()   { echo -e "${RED}✖${RESET}  $*"; }
-header()  { echo -e "\n${BOLD}${CYAN}$*${RESET}"; }
-divider() { echo -e "${CYAN}────────────────────────────────────────${NC}"; }
 
-# ── ARGUMENTS ────────────────────────────────────────────────────────────────
+# Arguments
 SKIP_VERIFY=false
 [[ "$*" == *"--no-verify"* ]] && SKIP_VERIFY=true
+
+clear
+logo
+
 
 # Detection of current track
 CURRENT_TRACK="Stable"
 [[ -f ".changeset/pre.json" ]] && CURRENT_TRACK=$(node -p "require('./.changeset/pre.json').tag" 2>/dev/null || echo "Prerelease")
 
-# ── STEP 0: Version & Git Audit ───────────────────────────────────────
-header "✨ Step 0: Version & Git Audit"
+# Step 0: Version & Git Audit
+header "Step 0: Version & Git Audit"
 LOCAL_VERSION=$(node -p "require('./package.json').version")
 info "Detected local version (@shoperzz/core): $LOCAL_VERSION"
 
@@ -78,8 +67,8 @@ bash ./tooling/audit/version-audit.sh || {
   exit 1
 }
 
-# ── STEP 1: Formatting Audit (Surgical) ──────────────────────────────────────
-header "✨ Step 1: Formatting Audit"
+# Step 1: Formatting Audit (Surgical)
+header "Step 1: Formatting Audit"
 
 FILES_DIRTY_BEFORE=$(git diff --name-only)
 info "Running Prettier on modified files..."
@@ -92,19 +81,32 @@ FILES_FIXED=$(comm -13 <(echo "$FILES_DIRTY_BEFORE" | sort) <(echo "$FILES_DIRTY
 if [[ -n "$FILES_FIXED" ]]; then
   warn "Formatting corrections applied to:"
   echo -e "${YELLOW}$FILES_FIXED${RESET}"
-  read -rp "  Commit these style fixes automatically? (Y/n) " AUTO_COMMIT_FORMAT
-  if [[ "$AUTO_COMMIT_FORMAT" != "n" && "$AUTO_COMMIT_FORMAT" != "N" ]]; then
-    echo "$FILES_FIXED" | xargs git add
-    git commit -m "style: format code according to standards"
-    success "Formatting committed."
-  else
+    read -rp "     Commit these style fixes automatically? (Y/n) " AUTO_COMMIT_FORMAT
+    if [[ "$AUTO_COMMIT_FORMAT" != "n" && "$AUTO_COMMIT_FORMAT" != "N" ]]; then
+      echo "$FILES_FIXED" | xargs git add
+      
+      FILE_COUNT=$(echo "$FILES_FIXED" | wc -l)
+      FIRST_FILE=$(echo "$FILES_FIXED" | head -n 1 | awk -F/ '{print $NF}')
+      
+      if [ "$FILE_COUNT" -eq 1 ]; then
+        COMMIT_MSG="style: reformat $FIRST_FILE"
+      elif [ "$FILE_COUNT" -eq 2 ]; then
+        SECOND_FILE=$(echo "$FILES_FIXED" | sed -n '2p' | awk -F/ '{print $NF}')
+        COMMIT_MSG="style: reformat $FIRST_FILE and $SECOND_FILE"
+      else
+        COMMIT_MSG="style: reformat $FIRST_FILE and $((FILE_COUNT - 1)) other files"
+      fi
+      
+      git commit -m "$COMMIT_MSG"
+      success "Formatting committed: $COMMIT_MSG"
+    else
     error "Push blocked: Style fixes must be committed."
     exit 1
   fi
 fi
 
-# ── STEP 2: Intent & Release Management ──────────────────────────────────────
-header "✨ Step 2: Intent & Release Management (Changesets)"
+# Step 2: Intent & Release Management
+header "Step 2: Intent & Release Management (Changesets)"
 
 # Detect existing changesets
 CHANGESETS=$(ls .changeset/*.md 2>/dev/null | grep -v "README.md" || true)
@@ -131,8 +133,8 @@ else
   info "Changesets detected: $(echo $CHANGESETS | wc -w) file(s)."
 fi
 
-# ── STEP 3: Quality Validation (Turbo) ───────────────────────────────────────
-header "🧪 Step 3: Quality Validation (Turbo)"
+# Step 3: Quality Validation (Turbo)
+header "Step 3: Quality Validation (Turbo)"
 
 if [[ "$SKIP_VERIFY" == "true" ]]; then
   warn "Skipping local validation (--no-verify)..."
@@ -146,24 +148,22 @@ else
   fi
 fi
 
-# ── STEP 4: Final Security Check (RODIN Protocol) ────────────────────────────
-header "✨ Step 4: RODIN Security Audit"
+# Step 4: Final Security Check (RODIN Protocol)
+header "Step 4: RODIN Security Audit"
 
 # Block if there's remaining "dirty" code (uncommitted functional changes)
 # We ignore changeset files and package.json which are managed by the bot
 DIRTY_REMAINING=$(git status --porcelain | grep -vE "^( |M| ) (.changeset/|package\.json)" || true)
 
 if [[ -n "$DIRTY_REMAINING" ]]; then
-  divider
   error "PUSH BLOCKED: You have uncommitted functional changes."
   echo "$DIRTY_REMAINING"
-  divider
   info "RODIN Protocol requires all functional changes to be manually committed."
   exit 1
 fi
 
-# ── STEP 5: Upstream Synchronization ─────────────────────────────────────────
-header "🔄 Step 5: Synchronization Audit"
+# Step 5: Upstream Synchronization
+header "Step 5: Synchronization Audit"
 
 if git remote | grep -q "origin"; then
     info "Checking alignment with origin/$LOCAL_BRANCH..."
@@ -178,16 +178,14 @@ if git remote | grep -q "origin"; then
     success "Branch is perfectly synchronized."
 fi
 
-# ── STEP 6: Final Push ───────────────────────────────────────────────────────
-header "🚀 Step 6: Pushing to GitHub"
+# Step 6: Final Push
+header "Step 6: Pushing to GitHub"
 
 info "Pushing $LOCAL_BRANCH to origin..."
 
 if git push origin "$LOCAL_BRANCH"; then
-    divider
     success "Push successful!"
     info "Shoperzz Infrastructure is secure."
-    divider
 else
     error "Push failed. Check connectivity or branch permissions."
     exit 1

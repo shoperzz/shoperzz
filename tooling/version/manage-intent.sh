@@ -1,26 +1,11 @@
 #!/bin/bash
-# ── Shoperzz Sovereign Intent Manager v4.0 (Logical Guard) ──────────────────
+# Shoperzz Sovereign Intent Manager v4.0 (Logical Guard)
 # This script ensures rigorous governance by preventing track regressions.
 
 set -e
 
-# Colors
-NC='\033[0m'
-BLUE='\033[0;34m'
-YELLOW='\033[1;33m'
-GREEN='\033[0;32m'
-CYAN='\033[0;36m'
-RED='\033[0;31m'
-
-info() { echo -e "${BLUE}ℹ  $1${NC}"; }
-warn() { echo -e "${YELLOW}⚠  $1${NC}"; }
-error() { echo -e "${RED}✖  $1${NC}"; exit 1; }
-success() { echo -e "${GREEN}✓  $1${NC}"; }
-
-header() {
-  echo -e "\n${CYAN}🚀 Shoperzz — Sovereign Intent Manager v4.0${NC}"
-  echo -e "${CYAN}───────────────────────────────────────────${NC}"
-}
+# Source UI Theme & Helpers
+source "$(dirname "$0")/../theme.sh"
 
 # 1. Detection of local track ranking
 get_rank() {
@@ -67,7 +52,7 @@ fi
 # 3. Intent & Purge check
 EXISTING_CHANGESETS=$(find .changeset -name "*.md" ! -name "README.md" 2>/dev/null | wc -l)
 if [ "$EXISTING_CHANGESETS" -gt 0 ]; then
-  header
+  header "Sovereign Intent Manager v4.0"
   warn "Existing release intents found ($EXISTING_CHANGESETS file(s))."
   echo -e "What would you like to do?"
   echo -e "  [c] ${GREEN}Continue${NC} (Add to existing intents)"
@@ -84,7 +69,7 @@ if [ "$EXISTING_CHANGESETS" -gt 0 ]; then
 fi
 
 # 4. Filtered Console
-header
+header "Sovereign Intent Manager v4.0"
 info "Current Focus: [${YELLOW}${CURRENT_TAG^^}${NC}] | Registry: [${CYAN}${REMOTE_TRACK^^}${NC}]"
 
 echo -e "\nWhat is your next move?"

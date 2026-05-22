@@ -1,4 +1,4 @@
-# ── Shoperzz Version Consistency Audit ──────────────────────────────────────
+# Shoperzz Version Consistency Audit
 # This script ensures local and remote environments are synchronized.
 
 set -e
