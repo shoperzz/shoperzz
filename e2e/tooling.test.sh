@@ -1,5 +1,5 @@
 #!/bin/bash
-# ── Shoperzz Tooling E2E Test Suite ──────────────────────────────────────────
+# Shoperzz Tooling E2E Test Suite
 # Tests the core CI and release scripts locally before pushing to GitHub.
 # Usage: pnpm test:e2e (or directly bash e2e/tooling.test.sh)
 
@@ -10,7 +10,9 @@ info() { echo -e "${BLUE}ℹ $1${NC}"; }
 pass() { echo -e "${GREEN}✓ $1${NC}"; }
 fail() { echo -e "${RED}✖ $1${NC}"; exit 1; }
 
-echo "🧪 Starting E2E Tests for Shoperzz Tooling..."
+trap 'rm -f RELEASE.md' EXIT
+
+echo "Starting E2E Tests for Shoperzz Tooling..."
 
 # 1. Test get-next-version.sh
 info "Testing get-next-version.sh..."
@@ -54,5 +56,5 @@ else
   fail "pnpm format failed"
 fi
 
-echo -e "\n${GREEN}✅ All E2E tooling tests passed. Safe to push to CI.${NC}"
+echo -e "\n${GREEN}All E2E tooling tests passed. Safe to push to CI.${NC}"
 exit 0
