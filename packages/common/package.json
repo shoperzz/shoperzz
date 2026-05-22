@@ -2,13 +2,42 @@
   "name": "@shoperzz/common",
   "version": "0.0.3-beta.0",
   "private": false,
+  "description": "Shared TypeScript types and contracts for the Shoperzz ecosystem.",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": ["dist"],
   "scripts": {
-    "build": "echo 'Skeleton release'",
-    "test": "echo 'No tests yet'",
-    "lint": "echo 'No lint yet'"
+    "build": "tsc --project tsconfig.json",
+    "check-types": "tsc --project tsconfig.json --noEmit",
+    "lint": "eslint src/ --ext .ts",
+    "dev": "tsc --project tsconfig.json --watch"
   },
   "license": "GPL-3.0-or-later",
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "keywords": [
+    "shoperzz",
+    "shoperzz-common",
+    "shoperzz-types",
+    "headless-commerce",
+    "ecommerce",
+    "nestjs",
+    "nestjs-plugin",
+    "nestjs-module",
+    "typescript",
+    "typescript-types",
+    "plugin-system",
+    "event-bus",
+    "vendure",
+    "africa",
+    "mobile-money",
+    "open-source"
+  ]
 }
