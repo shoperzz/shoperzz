@@ -49,8 +49,8 @@ jobs:
         with:
           version: pnpm changeset version
           publish: pnpm changeset publish
-          commit: "chore(release): v${{ steps.next_version.outputs.version }}"
-          title: "chore(release): v${{ steps.next_version.outputs.version }}"
+          commit: "release: ${{ steps.next_version.outputs.version }}"
+          title: "release: ${{ steps.next_version.outputs.version }}"
           createGithubReleases: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

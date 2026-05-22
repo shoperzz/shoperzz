@@ -57,7 +57,8 @@ if [ "$REMOTE_RANK" -gt "$CURRENT_RANK" ]; then
         pnpm changeset pre exit || true
         pnpm changeset pre enter "$REMOTE_TRACK"
         git add .changeset/pre.json
-        git commit -m "chore(release): align with remote ${REMOTE_TRACK} track"
+        CURRENT_VERSION=$(node -p "require('./packages/core/package.json').version" 2>/dev/null || echo "?")
+        git commit -m "release: align with remote ${REMOTE_TRACK} track at ${CURRENT_VERSION}"
         success "Aligned with remote track. Please restart 'pnpm push'."
         exit 0
     fi
@@ -105,7 +106,6 @@ read -p "Your choice: " CHOICE
 case $CHOICE in
   i)
     echo -e "\nIntent level for ${CURRENT_TAG^^}:"
-    echo -e "\nIntent level:"
     echo -e "  [1] ${GREEN}Patch${NC} (Bugs)"
     echo -e "  [2] ${GREEN}Minor${NC} (Features)"
     echo -e "  [3] ${GREEN}Major${NC} (Breaking)"
@@ -121,11 +121,12 @@ case $CHOICE in
     if [ "$NEW_RANK" -le "$CURRENT_RANK" ] && [ "$CURRENT_TAG" != "Stable" ]; then
         error "Illogical switch: Cannot move from ${CURRENT_TAG} to ${TAG}."
     fi
-    info "Initiating track: ${TAG}..."
+    CURRENT_VERSION=$(node -p "require('./packages/core/package.json').version" 2>/dev/null || echo "?")
+    info "Switching track: ${CURRENT_TAG} -> ${TAG}..."
     [[ "$CURRENT_TAG" != "Stable" ]] && pnpm changeset pre exit
     pnpm changeset pre enter "$TAG"
     git add .changeset/pre.json
-    git commit -m "chore(release): switch to ${TAG} track"
+    git commit -m "release: switch ${CURRENT_VERSION} from ${CURRENT_TAG} to ${TAG}"
     success "Successfully moved to ${TAG} track."
     ;;
   x)
@@ -133,9 +134,11 @@ case $CHOICE in
     warn "Going stable will close the current pre-release cycle."
     read -p "Are you sure? (y/N): " CONFIRM
     if [[ "$CONFIRM" =~ ^([yY][eE][sS]|[yY])$ ]]; then
+      CURRENT_VERSION=$(node -p "require('./packages/core/package.json').version" 2>/dev/null || echo "?")
+      STABLE_VERSION=$(echo "$CURRENT_VERSION" | sed 's/-[a-z]\+\.[0-9]\+//')
       pnpm changeset pre exit
       git add .changeset/pre.json || true
-      git commit -m "chore(release): exit pre-release, return to stable" || true
+      git commit -m "release: exit ${CURRENT_VERSION} to stable ${STABLE_VERSION}" || true
       success "Returned to STABLE track."
     fi
     ;;
