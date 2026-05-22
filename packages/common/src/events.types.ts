@@ -19,22 +19,22 @@
 export interface ShoperzzEvent<T = Record<string, unknown>> {
   // Unique event identifier. Format: "domain.plugin-slug.action"
   // Example: "payment.orange-money.confirmed"
-  readonly type: string
+  readonly type: string;
 
-  readonly payload: T
-  readonly timestamp: Date
+  readonly payload: T;
+  readonly timestamp: Date;
 
   // The canonical npm package name of the emitting plugin.
   // Example: "@shoperzz/plugin-payment-orange-money"
-  readonly pluginSource: string
+  readonly pluginSource: string;
 }
 
 // Extracts payload type from a ShoperzzEvent.
 // Useful when writing handlers that infer their input type from the event type.
-export type EventPayload<E extends ShoperzzEvent> = E['payload']
+export type EventPayload<E extends ShoperzzEvent> = E["payload"];
 
 // Signature of an event handler registered on the EventBus.
 // Handlers can be async — the bus awaits them before processing the next event.
 export type ShoperzzEventHandler<E extends ShoperzzEvent = ShoperzzEvent> = (
   event: E,
-) => void | Promise<void>
+) => void | Promise<void>;
