@@ -14,7 +14,7 @@ success() { echo -e "${GREEN}✓  $*${NC}"; }
 warn()    { echo -e "${YELLOW}⚠  $*${NC}"; }
 
 # ── 1. Resolve current version ───────────────────────────────────────────────
-VERSION="v$(node -p "require('./packages/core/package.json').version")"
+VERSION="$(node -p "require('./packages/core/package.json').version")"
 info "Target version: $VERSION"
 
 # ── 2. Idempotency Guard ─────────────────────────────────────────────────────
@@ -41,7 +41,7 @@ fi
 # ── 5. Create the Unified GitHub Release ─────────────────────────────────────
 info "Creating GitHub Release $VERSION..."
 gh release create "$VERSION" \
-  --title "Shoperzz $VERSION" \
+  --title "$VERSION" \
   --notes-file RELEASE.md \
   --target main \
   $PRERELEASE_FLAG

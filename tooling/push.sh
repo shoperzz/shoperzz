@@ -123,8 +123,8 @@ if [[ -z "$CHANGESETS" ]]; then
     read -p "Would you like to commit this intent (v${NEXT_VERSION} on ${CURRENT_TRACK^^}) automatically? (Y/n) " AUTO_COMMIT
     if [[ "$AUTO_COMMIT" =~ ^[Yy]$ || -z "$AUTO_COMMIT" ]]; then
        git add .changeset/*.md .changeset/pre.json 2>/dev/null || true
-       git diff --staged --quiet || git commit -m "chore(release): v${NEXT_VERSION}"
-       success "Intent v${NEXT_VERSION} committed."
+       git diff --staged --quiet || git commit -m "release: ${NEXT_VERSION}"
+       success "Intent ${NEXT_VERSION} committed."
     fi
   fi
 else

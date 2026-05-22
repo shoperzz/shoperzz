@@ -1,48 +1,28 @@
 ## Description
 
-<!-- A clear description of what this PR does. Focus on the "why", not just the "what". -->
+<!-- Write a brief description of the changes introduced by this PR. Include motivation for the change. -->
 
-## Type of Change
+## Related Issue
 
-- [ ] 🐛 Bug fix
-- [ ] ✨ New feature
-- [ ] 💥 Breaking change
-- [ ] 📝 Documentation only
-- [ ] ♻️ Refactoring
-- [ ] 🔧 Maintenance / Dependencies
-- [ ] 🔒 Security fix
+<!-- Link to the related issue here, e.g., "Fixes #123" -->
 
-## Impacted Packages
+## Release Track Target
 
-- [ ] `packages/core`
-- [ ] `packages/common`
-- [ ] `packages/cli`
-- [ ] `packages/testing`
-- [ ] `plugins/*` (Please specify: \***\*\_\_\_\*\***)
-- [ ] `apps/*` (Please specify: \***\*\_\_\_\*\***)
-- [ ] `demos/*` (Please specify: \***\*\_\_\_\*\***)
+<!-- Which release track should this land on? Check one. -->
 
-## Checklist
+- [ ] `alpha` (High risk, core rewriting)
+- [ ] `beta` (Moderate risk, new features/plugins)
+- [ ] `rc` (Low risk, stabilization before release)
+- [ ] `stable` (Patch fixes only)
 
-- [ ] Tests pass locally (`pnpm test:all`)
-- [ ] `.changeset` file added if packages were modified (`pnpm changeset`)
-- [ ] Documentation updated if necessary
-- [ ] Naming conventions followed
-- [ ] No `console.log` or debug code left
-- [ ] No sensitive data in code or tests
+## Contributor Checklist
 
-## Verification
+- [ ] I have read the [Contributing Guidelines](docs/CONTRIBUTING_RELEASES.md).
+- [ ] My commits follow the Conventional Commits format (`feat:`, `fix:`, etc.).
+- [ ] I have run `pnpm test` and `pnpm lint` successfully.
+- [ ] **I have NOT run `pnpm CHANGESET commands`** manually (if this is a community PR). The maintainer will handle release intents.
 
-**What was tested:**
+---
 
-```bash
-pnpm --filter @shoperzz/[package] test
-```
-
-## Reviewer Notes
-
-<!-- Context, decisions made, points of attention -->
-
-## Related Issues
-
-<!-- Closes #123 / Fixes #456 -->
+_For Maintainers:_
+Run `pnpm push` on the `dev` branch to handle versioning after merge.
