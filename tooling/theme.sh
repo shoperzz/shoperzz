@@ -22,8 +22,8 @@ logo() {
   echo -e "                                                        v${CURRENT_VERSION}"
   echo -e "\n  ${GRAY}${BOLD}[ PRECISION AI ORCHESTRATION ]${NC}"
   echo -e "  Stop building stores. Build rocket engines for e-commerce."
-  echo -e "  ${GRAY}GitHub: https://github.com/shoperzz/shoperzz${NC}"
-  echo -e "  ${GRAY}Docs:   https://shoperzz.dev${NC}\n"
+  echo -e "  ${GRAY}⚙️ GitHub: https://github.com/shoperzz/shoperzz${NC}"
+  echo -e "  ${GRAY}📚 Docs:   https://shoperzz.dev/docs${NC}\n"
 }
 
 info()    { echo -e "${CYAN}│${NC}  ${BLUE}::${NC} $*"; }
