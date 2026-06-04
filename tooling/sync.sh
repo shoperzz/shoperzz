@@ -1,29 +1,12 @@
 #!/usr/bin/env bash
-# ─────────────────────────────────────────────────────────────────────────────
-# sync.sh — Smart synchronization script for Shoperzz monorepo
+# sync.sh - Smart synchronization script for Shoperzz monorepo
 # Usage: ./tooling/sync.sh [--force] [--branch <name>]
-# ─────────────────────────────────────────────────────────────────────────────
-
 set -euo pipefail
 
-# ── Colors ───────────────────────────────────────────────────────────────────
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-CYAN='\033[0;36m'
-BOLD='\033[1m'
-RESET='\033[0m'
+# Source UI Theme & Helpers
+source "$(dirname "$0")/theme.sh"
 
-# ── Helpers ──────────────────────────────────────────────────────────────────
-info()    { echo -e "${BLUE}ℹ${RESET}  $*"; }
-success() { echo -e "${GREEN}✓${RESET}  $*"; }
-warn()    { echo -e "${YELLOW}⚠${RESET}  $*"; }
-error()   { echo -e "${RED}✖${RESET}  $*"; }
-header()  { echo -e "\n${BOLD}${CYAN}$*${RESET}"; }
-divider() { echo -e "${CYAN}────────────────────────────────────────${RESET}"; }
-
-# ── Arguments ────────────────────────────────────────────────────────────────
+# Arguments
 FORCE=false
 TARGET_BRANCH=""
 
@@ -35,9 +18,9 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-# ── Initial Checks ───────────────────────────────────────────────────────────
-header "🔄 Shoperzz — Repository Synchronization"
-divider
+# Initial Checks
+clear
+logo
 
 # Check if we are in a git repo
 if ! git rev-parse --git-dir > /dev/null 2>&1; then
@@ -59,7 +42,7 @@ if ! git remote get-url upstream > /dev/null 2>&1; then
   UPSTREAM_EXISTS=false
 fi
 
-# ── Detect Current Local Branch ──────────────────────────────────────────────
+# Detect Current Local Branch
 LOCAL_BRANCH=$(git branch --show-current)
 
 if [[ -z "$LOCAL_BRANCH" ]]; then
@@ -70,7 +53,7 @@ fi
 
 info "Current local branch: ${BOLD}$LOCAL_BRANCH${RESET}"
 
-# ── Check Protected Branches ─────────────────────────────────────────────────
+# Check Protected Branches
 PROTECTED_BRANCHES=("main" "dev")
 
 if [[ " ${PROTECTED_BRANCHES[*]} " != *" $LOCAL_BRANCH "* ]]; then
@@ -88,8 +71,8 @@ if [[ " ${PROTECTED_BRANCHES[*]} " != *" $LOCAL_BRANCH "* ]]; then
   fi
 fi
 
-# ── Check Local Uncommitted Changes ──────────────────────────────────────────
-header "📋 Verifying local changes"
+# Check Local Uncommitted Changes
+header "Verifying local changes"
 
 if ! git diff --quiet || ! git diff --cached --quiet; then
   warn "You have uncommitted changes:"
@@ -111,8 +94,8 @@ else
   STASHED=false
 fi
 
-# ── Fetch from remotes ───────────────────────────────────────────────────────
-header "📡 Fetching remote data"
+# Fetch from remotes
+header "Fetching remote data"
 
 info "Fetching from origin..."
 git fetch origin --tags --prune 2>/dev/null && success "origin updated" || warn "Could not contact origin"
@@ -122,8 +105,8 @@ if [[ "$UPSTREAM_EXISTS" == true ]]; then
   git fetch upstream --tags --prune 2>/dev/null && success "upstream updated" || warn "Could not contact upstream"
 fi
 
-# ── Analyze Remote Changes ───────────────────────────────────────────────────
-header "🔍 Analyzing remote changes"
+# Analyze Remote Changes
+header "Analyzing remote changes"
 
 REMOTE="upstream"
 [[ "$UPSTREAM_EXISTS" == false ]] && REMOTE="origin"
@@ -143,7 +126,7 @@ for BRANCH in "${PROTECTED_BRANCHES[@]}"; do
     AHEAD=$(git rev-list  --count "$REMOTE/$BRANCH..$BRANCH" 2>/dev/null || echo "0")
 
     if [[ "$BEHIND" -eq 0 && "$AHEAD" -eq 0 ]]; then
-      success "Branch '${BOLD}$BRANCH${RESET}' — Up to date ✓"
+      success "Branch '${BOLD}$BRANCH${RESET}' — Up to date"
     elif [[ "$BEHIND" -gt 0 && "$AHEAD" -eq 0 ]]; then
       warn "Branch '${BOLD}$BRANCH${RESET}' — ${BOLD}$BEHIND commit(s) behind${RESET} $REMOTE"
     elif [[ "$AHEAD" -gt 0 && "$BEHIND" -eq 0 ]]; then
@@ -154,8 +137,8 @@ for BRANCH in "${PROTECTED_BRANCHES[@]}"; do
   fi
 done
 
-# ── Detect Version Changes in package.json ───────────────────────────────────
-header "📦 Detecting version changes"
+# Detect Version Changes in package.json
+header "Detecting version changes"
 
 CHANGED_PACKAGES=()
 
@@ -192,8 +175,8 @@ if [[ -n "$NEW_TAGS" ]]; then
   done
 fi
 
-# ── Effective Synchronization ────────────────────────────────────────────────
-header "⚡ Synchronization"
+# Effective Synchronization
+header "Synchronization"
 
 SYNC_BRANCH="${TARGET_BRANCH:-$LOCAL_BRANCH}"
 
@@ -213,7 +196,7 @@ if [[ " ${PROTECTED_BRANCHES[*]} " == *" $SYNC_BRANCH "* ]]; then
   fi
 fi
 
-# ── Backport: pull version bumps from main → dev ──────────────────────────
+# Backport: pull version bumps from main → dev
 # The Changesets CI bot commits version bumps directly to main after each
 # release. This step automatically brings those changes back to dev.
 if [[ "$SYNC_BRANCH" == "dev" ]]; then
@@ -240,9 +223,9 @@ if [[ "$SYNC_BRANCH" == "dev" ]]; then
   fi
 fi
 
-# ── Restore stash if necessary ───────────────────────────────────────────────
+# Restore stash if necessary
 if [[ "${STASHED:-false}" == true ]]; then
-  header "📂 Restoring local changes"
+  header "Restoring local changes"
   if git stash pop; then
     success "Local changes restored."
   else
@@ -252,7 +235,7 @@ if [[ "${STASHED:-false}" == true ]]; then
   fi
 fi
 
-# ── Check if pnpm install is needed ──────────────────────────────────────────
+# Check if pnpm install is needed
 if [[ ${#CHANGED_PACKAGES[@]} -gt 0 ]]; then
   echo ""
   read -rp "  Some packages have changed. Run 'pnpm install' now? (Y/n) " INSTALL
@@ -262,8 +245,8 @@ if [[ ${#CHANGED_PACKAGES[@]} -gt 0 ]]; then
   fi
 fi
 
-# ── Final Summary ────────────────────────────────────────────────────────────
-header "✅ Synchronization Complete"
+# Final Summary
+header "Synchronization Complete"
 divider
 info "Local branch: ${BOLD}$LOCAL_BRANCH${RESET}"
 success "Repository synchronized with $REMOTE."
