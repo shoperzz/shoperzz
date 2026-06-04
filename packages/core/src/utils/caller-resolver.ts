@@ -2,7 +2,9 @@
  * Resolves the file path of the caller function by parsing the V8 stack trace.
  * Skips files matching the exclude pattern to find the originating package/file.
  */
-export function getCallerFile(excludePattern = "packages/core/src"): string | null {
+export function getCallerFile(
+  excludePattern = "packages/core/src",
+): string | null {
   const originalFunc = Error.prepareStackTrace;
   try {
     const err = new Error();

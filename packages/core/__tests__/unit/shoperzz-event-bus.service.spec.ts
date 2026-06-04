@@ -36,7 +36,9 @@ describe("ShoperzzEventBus", () => {
       }
     };
 
-    const pluginWithManifest = pluginClass as unknown as { manifest: ShoperzzPluginManifest };
+    const pluginWithManifest = pluginClass as unknown as {
+      manifest: ShoperzzPluginManifest;
+    };
     pluginWithManifest.manifest = {
       name,
       version: pluginClass.version,
@@ -202,7 +204,10 @@ describe("ShoperzzEventBus", () => {
         .mockReturnValue("core");
 
       eventBus.on<{ amount: number }>("payment.authorize", (event) => {
-        return { authorized: true, amount: event.payload.amount } as unknown as void;
+        return {
+          authorized: true,
+          amount: event.payload.amount,
+        } as unknown as void;
       });
 
       jest
@@ -255,11 +260,11 @@ describe("ShoperzzEventBus", () => {
       });
 
       const handler = jest.fn();
-      
+
       jest
         .spyOn(registry, "findPluginNameByCallerFile")
         .mockReturnValue(pluginName);
-        
+
       eventBus.once("test.once-event", handler);
 
       await eventBus.emit("test.once-event", { val: 1 });

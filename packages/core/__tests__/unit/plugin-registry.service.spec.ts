@@ -35,7 +35,9 @@ describe("PluginRegistry", () => {
     };
 
     // Embed inline manifest as an escape hatch for tests
-    const pluginWithManifest = pluginClass as unknown as { manifest: ShoperzzPluginManifest };
+    const pluginWithManifest = pluginClass as unknown as {
+      manifest: ShoperzzPluginManifest;
+    };
     pluginWithManifest.manifest = {
       name,
       version: pluginClass.version,
@@ -57,14 +59,26 @@ describe("PluginRegistry", () => {
     expect(() => registry.registerPlugins([mockPlugin])).not.toThrow();
     expect(registry.getActivePlugins()).toContain(mockPlugin);
     expect(registry.getManifest(mockPlugin)).toBeDefined();
-    expect(registry.getManifestByName("@shoperzz/plugin-mock-one")).toBeDefined();
+    expect(
+      registry.getManifestByName("@shoperzz/plugin-mock-one"),
+    ).toBeDefined();
   });
 
   it("should fail validation if manifest misses required fields", () => {
-    const fields = ["name", "version", "label", "category", "permissions", "emits", "listens"];
+    const fields = [
+      "name",
+      "version",
+      "label",
+      "category",
+      "permissions",
+      "emits",
+      "listens",
+    ];
     for (const field of fields) {
       const mockPlugin = createMockPlugin("@shoperzz/plugin-mock-invalid");
-      const pluginWithManifest = mockPlugin as unknown as { manifest?: Record<string, unknown> };
+      const pluginWithManifest = mockPlugin as unknown as {
+        manifest?: Record<string, unknown>;
+      };
       if (pluginWithManifest.manifest) {
         delete pluginWithManifest.manifest[field];
       }
@@ -96,7 +110,7 @@ describe("PluginRegistry", () => {
 
   it("should load the manifest from the filesystem (shoperzz.plugin.yml)", () => {
     expect(() => registry.registerPlugins([MockFixturePlugin])).not.toThrow();
-    
+
     const manifest = registry.getManifest(MockFixturePlugin);
     expect(manifest).toBeDefined();
     expect(manifest?.name).toBe("@shoperzz/plugin-mock-fixture");
@@ -108,9 +122,10 @@ describe("PluginRegistry", () => {
 
   it("should successfully resolve plugin name from caller file", () => {
     registry.registerPlugins([MockFixturePlugin]);
-    
+
     // Simulate a call from a file inside the mock-plugin package
-    const fakeCallerFile = "/home/kali-root/Dev/Personnal Projects/!@Github Organizations/shoperzz/shoperzz/packages/core/__tests__/fixtures/mock-plugin/src/mock.service.ts";
+    const fakeCallerFile =
+      "/home/kali-root/Dev/Personnal Projects/!@Github Organizations/shoperzz/shoperzz/packages/core/__tests__/fixtures/mock-plugin/src/mock.service.ts";
     const pluginName = registry.findPluginNameByCallerFile(fakeCallerFile);
     expect(pluginName).toBe("@shoperzz/plugin-mock-fixture");
   });

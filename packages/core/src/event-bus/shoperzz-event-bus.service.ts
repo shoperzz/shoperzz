@@ -19,7 +19,10 @@ export class ShoperzzEventBus {
    * Emits an event asynchronously to all registered listeners.
    * Enforces that the emitting plugin has declared the event in its manifest.
    */
-  public async emit<TPayload = Record<string, unknown>>(type: string, payload: TPayload): Promise<void> {
+  public async emit<TPayload = Record<string, unknown>>(
+    type: string,
+    payload: TPayload,
+  ): Promise<void> {
     const callerFile = getCallerFile();
     let pluginSource = "core";
 
@@ -48,7 +51,9 @@ export class ShoperzzEventBus {
 
     this.logger.debug(`Emitting event "${type}" from source "${pluginSource}"`);
 
-    const listeners = this.emitter.listeners(type) as Array<(event: ShoperzzEvent<TPayload>) => void | Promise<void>>;
+    const listeners = this.emitter.listeners(type) as Array<
+      (event: ShoperzzEvent<TPayload>) => void | Promise<void>
+    >;
 
     for (const listener of listeners) {
       Promise.resolve()
@@ -66,7 +71,10 @@ export class ShoperzzEventBus {
    * Subscribes to an event pattern.
    * Enforces that the listening plugin has declared the event in its listens manifest.
    */
-  public on<T extends Record<string, unknown> = Record<string, unknown>>(type: string, handler: ShoperzzEventHandler<ShoperzzEvent<T>>): void {
+  public on<T extends Record<string, unknown> = Record<string, unknown>>(
+    type: string,
+    handler: ShoperzzEventHandler<ShoperzzEvent<T>>,
+  ): void {
     this.registerListener(type, handler, false);
   }
 
@@ -74,7 +82,10 @@ export class ShoperzzEventBus {
    * Subscribes to an event pattern once.
    * Enforces that the listening plugin has declared the event in its listens manifest.
    */
-  public once<T extends Record<string, unknown> = Record<string, unknown>>(type: string, handler: ShoperzzEventHandler<ShoperzzEvent<T>>): void {
+  public once<T extends Record<string, unknown> = Record<string, unknown>>(
+    type: string,
+    handler: ShoperzzEventHandler<ShoperzzEvent<T>>,
+  ): void {
     this.registerListener(type, handler, true);
   }
 
@@ -82,7 +93,10 @@ export class ShoperzzEventBus {
    * Synchronous Request/Response pattern over the EventBus.
    * Returns the value returned by the first registered handler.
    */
-  public async request<TResponse = unknown, TPayload = unknown>(type: string, payload: TPayload): Promise<TResponse> {
+  public async request<TResponse = unknown, TPayload = unknown>(
+    type: string,
+    payload: TPayload,
+  ): Promise<TResponse> {
     const callerFile = getCallerFile();
     let pluginSource = "core";
 
@@ -113,7 +127,9 @@ export class ShoperzzEventBus {
       `Request-response event "${type}" initiated by "${pluginSource}"`,
     );
 
-    const listeners = this.emitter.listeners(type) as Array<(event: ShoperzzEvent<TPayload>) => TResponse | Promise<TResponse>>;
+    const listeners = this.emitter.listeners(type) as Array<
+      (event: ShoperzzEvent<TPayload>) => TResponse | Promise<TResponse>
+    >;
     if (listeners.length === 0) {
       throw new Error(
         `No handler registered to process request event "${type}".`,
@@ -123,7 +139,9 @@ export class ShoperzzEventBus {
     return listeners[0]!(event);
   }
 
-  private registerListener<T extends Record<string, unknown> = Record<string, unknown>>(
+  private registerListener<
+    T extends Record<string, unknown> = Record<string, unknown>,
+  >(
     type: string,
     handler: ShoperzzEventHandler<ShoperzzEvent<T>>,
     once: boolean,

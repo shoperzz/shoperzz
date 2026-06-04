@@ -12,7 +12,9 @@ export class ShoperzzCoreModule {
     registry.registerPlugins(config.plugins);
 
     // 2. Extract NestJS modules from all configured plugins
-    const pluginModules = config.plugins.map((plugin) => plugin.getNestModule());
+    const pluginModules = config.plugins.map((plugin) =>
+      plugin.getNestModule(),
+    );
 
     return {
       module: ShoperzzCoreModule,

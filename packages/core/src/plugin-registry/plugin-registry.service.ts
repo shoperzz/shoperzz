@@ -9,7 +9,10 @@ import { getPackageDir } from "../utils/package-path";
 @Injectable()
 export class PluginRegistry {
   private static instance: PluginRegistry;
-  private pluginMap = new Map<ShoperzzPluginStatic<unknown>, ShoperzzPluginManifest>();
+  private pluginMap = new Map<
+    ShoperzzPluginStatic<unknown>,
+    ShoperzzPluginManifest
+  >();
   private nameToPluginMap = new Map<string, ShoperzzPluginStatic<unknown>>();
 
   public static getInstance(): PluginRegistry {
@@ -42,7 +45,9 @@ export class PluginRegistry {
     }
   }
 
-  public getManifest(plugin: ShoperzzPluginStatic<unknown>): ShoperzzPluginManifest | undefined {
+  public getManifest(
+    plugin: ShoperzzPluginStatic<unknown>,
+  ): ShoperzzPluginManifest | undefined {
     return this.pluginMap.get(plugin);
   }
 
@@ -74,7 +79,9 @@ export class PluginRegistry {
   private loadManifestForPlugin(
     plugin: ShoperzzPluginStatic<unknown>,
   ): ShoperzzPluginManifest {
-    const pluginWithManifest = plugin as unknown as { manifest?: ShoperzzPluginManifest };
+    const pluginWithManifest = plugin as unknown as {
+      manifest?: ShoperzzPluginManifest;
+    };
     if (pluginWithManifest.manifest) {
       const manifest = pluginWithManifest.manifest;
       validateManifest(manifest);
@@ -114,7 +121,9 @@ export class PluginRegistry {
     );
   }
 
-  private getModuleFilePath(exportedValue: ShoperzzPluginStatic<unknown>): string | null {
+  private getModuleFilePath(
+    exportedValue: ShoperzzPluginStatic<unknown>,
+  ): string | null {
     for (const [file, mod] of Object.entries(require.cache)) {
       if (mod && mod.exports) {
         if (
