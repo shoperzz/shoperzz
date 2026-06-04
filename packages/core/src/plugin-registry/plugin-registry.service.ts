@@ -32,7 +32,7 @@ export class PluginRegistry {
       this.nameToPluginMap.set(manifest.name, plugin);
     }
 
-    for (const [plugin, manifest] of this.pluginMap.entries()) {
+    for (const [, manifest] of this.pluginMap.entries()) {
       if (manifest.requires) {
         for (const req of manifest.requires) {
           if (!this.nameToPluginMap.has(req)) {
