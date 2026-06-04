@@ -133,15 +133,13 @@ describe("PluginRegistry", () => {
     expect(pluginName).toBe("@shoperzz/plugin-mock-fixture");
   });
 
-  it("should return null from findPluginNameByCallerFile when no plugin matches the caller path", () => {
-    const mockPlugin = createMockPlugin("@shoperzz/plugin-no-match");
-    registry.registerPlugins([mockPlugin]);
+  it("should return null from findPluginNameByCallerFile when caller belongs to a different package", () => {
+    // MockFixturePlugin lives in packages/core/__tests__/fixtures/mock-plugin/
+    registry.registerPlugins([MockFixturePlugin]);
 
-    // This path is valid but belongs to no registered plugin's package dir
-    const result = registry.findPluginNameByCallerFile(
-      path.join(__dirname, "../fixtures/mock-plugin/src/mock.service.ts"),
-    );
-    // mockPlugin has an inline manifest so getModuleFilePath will return null for it
+    // __filename is inside packages/core — a completely different package from mock-plugin
+    // Behavioral expectation: no registered plugin maps to this package → null
+    const result = registry.findPluginNameByCallerFile(__filename);
     expect(result).toBeNull();
   });
 
