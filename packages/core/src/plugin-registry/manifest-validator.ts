@@ -17,7 +17,7 @@ export function validateManifest(manifest: ShoperzzPluginManifest): void {
   for (const field of requiredFields) {
     if (!manifest[field]) {
       throw new Error(
-        `Manifest${manifest.name ? ` for "${manifest.name}"` : ""} missing required field "${field}".`,
+        `Manifest${manifest.name ? ` for "${manifest.name}"` : ""} missing required field "${String(field)}".`,
       );
     }
   }
