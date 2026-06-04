@@ -141,8 +141,9 @@ if [[ "$SKIP_VERIFY" == "true" ]]; then
 else
   info "Cleaning local build outputs to force fresh checks..."
   find . -maxdepth 3 -name "dist" -type d -not -path "*/node_modules/*" -exec rm -rf {} + 2>/dev/null || true
+  find . -maxdepth 3 -name "*.tsbuildinfo" -not -path "*/node_modules/*" -exec rm -f {} + 2>/dev/null || true
   info "Building packages (required before typecheck)..."
-  if ! pnpm build; then
+  if ! pnpm exec turbo build --force; then
     error "Build failed. Fix build errors before pushing."
     exit 1
   fi
