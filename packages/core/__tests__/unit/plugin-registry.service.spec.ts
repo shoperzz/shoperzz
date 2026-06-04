@@ -1,3 +1,4 @@
+import * as path from "path";
 import { PluginRegistry } from "../../src/plugin-registry/plugin-registry.service";
 import { ShoperzzPluginStatic, ShoperzzPluginManifest } from "@shoperzz/common";
 import { MockFixturePlugin } from "../fixtures/mock-plugin/src/mock.plugin";
@@ -123,10 +124,44 @@ describe("PluginRegistry", () => {
   it("should successfully resolve plugin name from caller file", () => {
     registry.registerPlugins([MockFixturePlugin]);
 
-    // Simulate a call from a file inside the mock-plugin package
-    const fakeCallerFile =
-      "/home/kali-root/Dev/Personnal Projects/!@Github Organizations/shoperzz/shoperzz/packages/core/__tests__/fixtures/mock-plugin/src/mock.service.ts";
+    // Use __dirname so this resolves correctly in any environment (local, CI)
+    const fakeCallerFile = path.join(
+      __dirname,
+      "../fixtures/mock-plugin/src/mock.service.ts",
+    );
     const pluginName = registry.findPluginNameByCallerFile(fakeCallerFile);
     expect(pluginName).toBe("@shoperzz/plugin-mock-fixture");
+  });
+
+  it("should return null from findPluginNameByCallerFile when caller belongs to a different package", () => {
+    // MockFixturePlugin lives in packages/core/__tests__/fixtures/mock-plugin/
+    registry.registerPlugins([MockFixturePlugin]);
+
+    // __filename is inside packages/core — a completely different package from mock-plugin
+    // Behavioral expectation: no registered plugin maps to this package → null
+    const result = registry.findPluginNameByCallerFile(__filename);
+    expect(result).toBeNull();
+  });
+
+  it("should throw when a shoperzz.plugin.yml is malformed", () => {
+    const fs = require("fs") as typeof import("fs");
+    const originalExistsSync = fs.existsSync;
+    const originalReadFileSync = fs.readFileSync;
+
+    // Make it find a yml but return invalid YAML content
+    jest.spyOn(fs, "existsSync").mockImplementation((p) => {
+      if (String(p).endsWith("shoperzz.plugin.yml")) return true;
+      return originalExistsSync(p as string);
+    });
+    jest.spyOn(fs, "readFileSync").mockImplementation((p, ...args) => {
+      if (String(p).endsWith("shoperzz.plugin.yml")) return ": bad: yaml: [";
+      return originalReadFileSync(p as string, ...(args as [BufferEncoding]));
+    });
+
+    expect(() => registry.registerPlugins([MockFixturePlugin])).toThrow(
+      /Failed to parse manifest/,
+    );
+
+    jest.restoreAllMocks();
   });
 });
