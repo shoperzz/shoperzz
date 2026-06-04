@@ -1,0 +1,11 @@
+name: "@shoperzz/plugin-mock-fixture"
+version: "1.0.0"
+label: "Mock Fixture"
+category: "payment"
+permissions:
+  - order.read
+  - payment.write
+emits:
+  - payment.mock-fixture.confirmed
+listens:
+  - order.created

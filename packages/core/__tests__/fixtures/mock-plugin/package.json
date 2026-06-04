@@ -1,0 +1,5 @@
+{
+  "name": "@shoperzz/plugin-mock-fixture",
+  "version": "1.0.0",
+  "main": "dist/mock.plugin.js"
+}
