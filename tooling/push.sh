@@ -139,6 +139,8 @@ header "Step 3: Quality Validation (Turbo)"
 if [[ "$SKIP_VERIFY" == "true" ]]; then
   warn "Skipping local validation (--no-verify)..."
 else
+  info "Cleaning local build outputs to force fresh checks..."
+  find . -maxdepth 3 -name "dist" -type d -not -path "*/node_modules/*" -exec rm -rf {} + 2>/dev/null || true
   info "Running lint, typecheck, tests and commitlint..."
   if pnpm lint && pnpm typecheck && pnpm test && pnpm commitlint --from main; then
     success "All quality checks passed."
